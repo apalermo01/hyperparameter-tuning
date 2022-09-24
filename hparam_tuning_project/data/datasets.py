@@ -1,15 +1,17 @@
+from typing import Union
 import pytorch_lightning as pl
-from torchvision import datasets as ds 
+from torchvision import datasets as ds
 from torch.utils.data import Dataset
 from torchvision import transforms
 from hparam_tuning_project.utils import PATHS
 from torch.utils.data.dataset import random_split
 from torch.utils.data import DataLoader
 
+
 class PytorchDataset(pl.LightningDataModule):
     """Dataset wrapper for the default pytorch datasets
 
-    TODO: 
+    TODO:
     restrict dataset size
     """
 
@@ -31,13 +33,13 @@ class PytorchDataset(pl.LightningDataModule):
     }
 
     def __init__(self,
-                 dataset_id,
-                 train,
-                 batch_size=4,
-                 num_workers=1,
-                 use_default_path = True,
-                 train_split_size=0.8,
-                 dataset_path = None):
+                 dataset_id: str,
+                 train: bool,
+                 batch_size: int = 4,
+                 num_workers: int = 1,
+                 use_default_path: bool = True,
+                 train_split_size: float = 0.8,
+                 dataset_path: Union[str, None] = None):
         super().__init__()
 
         self.dataset_id = dataset_id
@@ -53,26 +55,25 @@ class PytorchDataset(pl.LightningDataModule):
             self.dataset_path = dataset_path
 
         self.vision_dataset = self.dataset_registry[self.dataset_id](
-            root = self.dataset_path,
-            train = self.train,
-            download = True,
-            transform = self.transform,
-            target_transform = None,
+            root=self.dataset_path,
+            train=self.train,
+            download=True,
+            transform=self.transform,
+            target_transform=None,
         )
+
     def setup(self, stage=None):
-        
 
         train_val = self.dataset_registry[self.dataset_id](
-            root = self.dataset_path,
-            train = True,
-            transform = self.transform
+            root=self.dataset_path,
+            train=True,
+            transform=self.transform
         )
 
-
-        train_size = int(self.train_split_size*len(train_val))
+        train_size = int(self.train_split_size * len(train_val))
         val_size = len(train_val) - train_size
         self.train_dataset, self.val_dataset = random_split(train_val, [train_size, val_size])
-    
+
     def train_dataloader(self):
         train_loader = DataLoader(
             dataset=self.train_dataset,

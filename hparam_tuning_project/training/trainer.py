@@ -1,11 +1,12 @@
 import pytorch_lightning as pl
-from torchvision import datasets as ds 
+from torchvision import datasets as ds
 from hparam_tuning_project.models.simple_models import FFN, CNN1
 from torch import optim
 from torch.optim import lr_scheduler
 from torch.nn import BCEWithLogitsLoss
 import torch.nn.functional as F
 import torch
+
 
 class Trainer(pl.LightningModule):
     """Trainer for the hyperparameter tuning project"""
@@ -41,7 +42,6 @@ class Trainer(pl.LightningModule):
         'bce_with_logits_loss': BCEWithLogitsLoss
     }
 
-
     def __init__(self,
                  model_cfg,
                  optimizer_cfg,
@@ -57,7 +57,7 @@ class Trainer(pl.LightningModule):
         self.model = self.build_model()
         self.loss = self.build_loss()
 
-    def forward(self):
+    def forward(self, x):
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
@@ -75,11 +75,23 @@ class Trainer(pl.LightningModule):
         self.log('val_loss', loss, on_step=True, prog_bar=True)
 
     def configure_optimizers(self):
-        return self.optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(),
-            **self.optimizer_cfg['args'])
+        if self.optimizer_cfg['args'] is not None:
+            args = self.optimizer_cfg['args']
+        else:
+            args = dict()
+        return self.optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(), **args)
 
     def build_model(self):
-       return self.model_registry[self.model_cfg['model_id']](**self.model_cfg['args'])
+        if self.model_cfg['args'] is not None:
+            args = self.model_cfg['args']
+        else:
+            args = dict()
+
+        return self.model_registry[self.model_cfg['model_id']](**args)
 
     def build_loss(self):
-        return self.loss_registry[self.loss_cfg['loss_id']](**self.loss_cfg['args'])
+        if self.loss_cfg['args'] is not None:
+            args = self.loss_cfg['args']
+        else:
+            args = dict()
+        return self.loss_registry[self.loss_cfg['loss_id']](**args)
