@@ -73,6 +73,7 @@ class Trainer(pl.LightningModule):
         target = F.one_hot(target, 10).type(torch.float32)
         loss = self.loss(pred, target)
         self.log('val_loss', loss, on_step=True, prog_bar=True)
+        return {'val_loss': loss}
 
     def configure_optimizers(self):
         if self.optimizer_cfg['args'] is not None:

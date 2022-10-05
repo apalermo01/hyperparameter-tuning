@@ -18,6 +18,14 @@ training_cfg:
   optimizer_cfg:
     optimizer_id: adam
     args:
+      lr: 0.001
 
 flags:
-  max_epochs: 5
+  max_epochs: 10
+  default_root_dir: ./
+
+callbacks:
+  - early_stop:
+      monitor: 'val_loss'
+      mode: 'min'
+  - plot_metrics:

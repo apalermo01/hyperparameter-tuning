@@ -4,6 +4,7 @@ from typing import Dict
 import yaml
 from hparam_tuning_project.training.trainer import Trainer
 from hparam_tuning_project.data.datasets import PytorchDataset
+from hparam_tuning_project.utils import initialize_callbacks
 import pytorch_lightning as pl
 
 config_path = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
@@ -31,21 +32,12 @@ def update_config_partial_dataset(cfg: Dict, frac: float):
     pass
 
 
-# def fill_nones_with_empty_dict(cfg):
-    # for key in cfg:
-    #     if cfg[key] is None:
-    #         cfg[key] = dict()
-    #     elif isinstance(cfg[key], dict) and len(cfg[key]) > 0:
-    #         return fill_nones_with_empty_dict(cfg[key])
-    # return cfg
-
-
 def validate_cfg(cfg):
     ### input validation
     if 'flags' not in cfg or ('flags' in cfg and cfg['flags'] is None):
         cfg['flags'] = dict()
 
-    #cfg = fill_nones_with_empty_dict(cfg)
+    # cfg = fill_nones_with_empty_dict(cfg)
 
     return cfg
 
@@ -54,10 +46,10 @@ def run_optim(cfg):
     ### Single optimization run
 
     # for now, try training a single model
-    # print(cfg)
     dataset = PytorchDataset(**cfg['training_cfg']['data_cfg'])
     model = Trainer(**cfg['training_cfg'])
-    learner = pl.Trainer(**cfg['flags'])
+    callbacks = initialize_callbacks(cfg['callbacks'])
+    learner = pl.Trainer(**cfg['flags'], callbacks=callbacks)
     learner.fit(model, dataset)
 
 
