@@ -50,20 +50,22 @@ def validate_cfg(cfg):
 
 def train_func(cfg):
     ### Single optimization run
-    tune_callback = TuneReportCallback(['val_loss'], on='validation_end')
+    tune_callback = TuneReportCallback('val_loss', on='validation_end')
 
     # for now, try training a single model
     dataset = PytorchDataset(**cfg['training_cfg']['data_cfg'])
     model = Trainer(**cfg['training_cfg'])
     callbacks = initialize_callbacks(cfg['callbacks'])
-    learner = pl.Trainer(**cfg['flags'], callbacks=callbacks.append(tune_callback))
+    callbacks.append(tune_callback)
+    print(callbacks)
+    learner = pl.Trainer(**cfg['flags'], callbacks=callbacks)
     learner.fit(model, dataset)
 
 
 def run_optim(cfg):
     cfg['training_cfg']['optimizer_cfg']['args']['lr'] = tune.loguniform(1e-4, 1e-1)
     cfg['flags']['enable_progress_bar'] = False
-    num_epochs = 5
+    num_epochs = 2
     scheduler = ASHAScheduler(
         max_t=num_epochs,
         grace_period=1,
@@ -78,20 +80,29 @@ def run_optim(cfg):
         metric='val_loss',
         mode='min',
         scheduler=scheduler,
-        num_samples=10,
+        num_samples=2,
     )
 
-    run_config = air.RunConfig(
-        name='test',
-        progress_reporter=reporter
-    )
+    # run_config = air.RunConfig(
+    #     name='test',
+    #     progress_reporter=reporter
+    # )
     train_fn = tune.with_parameters(train_func)
 
-    tuner = tune.Tuner(train_fn,
-                       tune_config=tune_cfg,
-                       param_space=cfg,
-                       run_config=run_config)
-    results = tuner.fit()
+    # tuner = tune.Tuner(train_fn,
+    #                    tune_config=tune_cfg,
+    #                    param_space=cfg,
+    #                    run_config=run_config)
+    results = tune.run(train_fn,
+                       resources_per_trial={"cpu": 8, "gpu": 1},
+                       metric='val_loss',
+                       mode='min',
+                       config=cfg,
+                       num_samples=2,
+                       scheduler=scheduler,
+                       progress_reporter=reporter,
+                       name='test')
+    # results = tuner.fit()
 
 
 def main():
