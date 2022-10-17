@@ -1,0 +1,33 @@
+training_cfg:
+  model_cfg:
+    model_id: torch_classifier
+    args:
+      architecture_id: regnet_y_400mf
+      pretrained: True
+      num_classes: 10
+      num_input_channels: 1
+
+  data_cfg:
+    dataset_id: mnist
+    train: True
+    batch_size: 128
+    num_workers: 8
+
+  loss_cfg:
+    loss_id: bce_with_logits_loss
+    args:
+
+  optimizer_cfg:
+    optimizer_id: adam
+    args:
+      lr: 0.001
+
+flags:
+  max_epochs: 10
+  default_root_dir: ./
+
+callbacks:
+  - early_stop:
+      monitor: 'val_loss'
+      mode: 'min'
+  - plot_metrics:

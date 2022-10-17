@@ -1,46 +1,16 @@
 import pytorch_lightning as pl
 from torchvision import datasets as ds
 from hparam_tuning_project.models.simple_models import FFN, CNN1
-from torch import optim
-from torch.optim import lr_scheduler
-from torch.nn import BCEWithLogitsLoss
+
 import torch.nn.functional as F
 import torch
+
+from ..models import model_registry
+from . import optimizer_registry, scheduler_registry, loss_registry
 
 
 class Trainer(pl.LightningModule):
     """Trainer for the hyperparameter tuning project"""
-
-    model_registry = {
-        'FFN': FFN,
-        'CNN1': CNN1,
-    }
-
-    optimizer_registry = {
-        'adadelta': optim.Adadelta,
-        'adagrad': optim.Adagrad,
-        'adam': optim.Adam,
-        'sgd': optim.SGD
-    }
-
-    scheduler_registry = {
-        'lambda_lr': lr_scheduler.LambdaLR,
-        'multiplicative_lr': lr_scheduler.MultiplicativeLR,
-        'step_lr': lr_scheduler.StepLR,
-        'multi_step_lr': lr_scheduler.MultiStepLR,
-        'constant_lr': lr_scheduler.ConstantLR,
-        'linear_lr': lr_scheduler.LinearLR,
-        'exponential_lr': lr_scheduler.ExponentialLR,
-        'cosine_annealing_lr': lr_scheduler.CosineAnnealingLR,
-        'reduce_lr_on_plateau': lr_scheduler.ReduceLROnPlateau,
-        'cyclic_lr': lr_scheduler.CyclicLR,
-        'one_cycle_lr': lr_scheduler.OneCycleLR,
-        'cosine_annealing_warm_restarts': lr_scheduler.CosineAnnealingWarmRestarts,
-    }
-
-    loss_registry = {
-        'bce_with_logits_loss': BCEWithLogitsLoss
-    }
 
     def __init__(self,
                  model_cfg,
@@ -80,7 +50,7 @@ class Trainer(pl.LightningModule):
             args = self.optimizer_cfg['args']
         else:
             args = dict()
-        return self.optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(), **args)
+        return optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(), **args)
 
     def build_model(self):
         if self.model_cfg['args'] is not None:
@@ -88,11 +58,11 @@ class Trainer(pl.LightningModule):
         else:
             args = dict()
 
-        return self.model_registry[self.model_cfg['model_id']](**args)
+        return model_registry[self.model_cfg['model_id']](**args)
 
     def build_loss(self):
         if self.loss_cfg['args'] is not None:
             args = self.loss_cfg['args']
         else:
             args = dict()
-        return self.loss_registry[self.loss_cfg['loss_id']](**args)
+        return loss_registry[self.loss_cfg['loss_id']](**args)

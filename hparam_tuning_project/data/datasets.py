@@ -89,7 +89,7 @@ class PytorchDataset(pl.LightningDataModule):
         train_loader = DataLoader(
             dataset=self.val_dataset,
             sampler=None,
-            shuffle=True,
+            shuffle=False,
             num_workers=self.num_workers,
             batch_size=self.batch_size,
         )
