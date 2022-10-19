@@ -4,8 +4,11 @@ from torchvision import datasets as ds
 from torch.utils.data import Dataset
 from torchvision import transforms
 from hparam_tuning_project.utils import PATHS
+import torch
 from torch.utils.data.dataset import random_split
+from torch.utils.data import Subset
 from torch.utils.data import DataLoader
+import numpy as np
 
 
 class PytorchDataset(pl.LightningDataModule):
@@ -39,7 +42,9 @@ class PytorchDataset(pl.LightningDataModule):
                  num_workers: int = 1,
                  use_default_path: bool = True,
                  train_split_size: float = 0.8,
-                 dataset_path: Union[str, None] = None):
+                 dataset_path: Union[str, None] = None,
+                 use_precomputed_split: bool = True,
+                 split_id: Union[str, None] = None):
         super().__init__()
 
         self.dataset_id = dataset_id
@@ -48,6 +53,8 @@ class PytorchDataset(pl.LightningDataModule):
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.train_split_size = train_split_size
+        self.use_precomputed_split = use_precomputed_split
+        self.split_id = split_id
         if use_default_path:
             self.dataset_path = PATHS['dataset_path'] + dataset_id + "/"
         else:
@@ -70,9 +77,23 @@ class PytorchDataset(pl.LightningDataModule):
             transform=self.transform
         )
 
-        train_size = int(self.train_split_size * len(train_val))
-        val_size = len(train_val) - train_size
-        self.train_dataset, self.val_dataset = random_split(train_val, [train_size, val_size])
+        if self.use_precomputed_split:
+            if self.split_id is None:
+                split_id = self.dataset_id
+            else:
+                split_id = self.split_id
+
+            train_idx = np.loadtxt(f"./splits/{split_id}_train.txt")
+            val_idx = np.loadtxt(f"./splits/{split_id}_val.txt")
+            self.train_dataset = Subset(train_val, train_idx.astype(int))
+            self.val_dataset = Subset(train_val, val_idx.astype(int))
+            print(self.train_dataset)
+        else:
+            train_size = int(self.train_split_size * len(train_val))
+            val_size = len(train_val) - train_size
+            self.train_dataset, self.val_dataset = random_split(train_val, [train_size, val_size])
+        # print(self.train_dataset)
+        # assert False
 
     def train_dataloader(self):
         train_loader = DataLoader(

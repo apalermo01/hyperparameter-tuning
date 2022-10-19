@@ -28,20 +28,6 @@ def load_cfg(path):
     return cfg
 
 
-def update_config_partial_dataset(cfg: Dict, frac: float):
-    """Update config parameters to take a fraction of dataset
-
-    Parameters
-    ----------
-    cfg : Dict
-        config file
-    frac : float
-        fraction of dataset to use
-    """
-
-    pass
-
-
 def validate_cfg(cfg):
     ### input validation
     if 'flags' not in cfg or ('flags' in cfg and cfg['flags'] is None):
@@ -92,7 +78,7 @@ def run_optim(cfg, run_id,):
         local_dir='../hparam_results/'
     )
 
-    train_fn = tune.with_parameters(train_func)
+    train_fn = tune.with_resources(train_func, {'cpu': 4})
 
     tuner = tune.Tuner(train_fn,
                        tune_config=tune_cfg,

@@ -1,7 +1,7 @@
 import argparse
 from distutils.command.build import build
 import yaml
-from hparam_tuning_project.training import build_and_fit_modules
+from hparam_tuning_project.training.utils import build_and_fit_modules
 import os
 from datetime import datetime as dt
 
@@ -26,7 +26,7 @@ def main():
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config_path', default='')
+    parser.add_argument('--config_path', default='./training_configs/')
     parser.add_argument('--config_name', required=True)
     args = parser.parse_args()
     return args
