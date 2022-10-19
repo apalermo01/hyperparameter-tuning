@@ -1,7 +1,7 @@
 import argparse
-from distutils.command.build import build
 import yaml
 from hparam_tuning_project.training.utils import build_and_fit_modules
+from hparam_tuning_project.utils import load_cfg
 import os
 from datetime import datetime as dt
 
@@ -13,13 +13,7 @@ def main():
     else:
         config_name = args.config_name
 
-    with open(os.path.join(args.config_path, config_name), 'r') as f:
-        cfg = yaml.safe_load(f)
-
-    cfg['meta'] = {
-        'entry_script': 'train_from_config.py',
-        'start_time': str(dt.now())
-    }
+    cfg = load_cfg(os.path.join(args.config_path, config_name), args)
 
     build_and_fit_modules(cfg)
 

@@ -1,12 +1,9 @@
 """Functionality to run one iteration of the experiment"""
 
 import argparse
-from distutils.command.build import build
 from typing import Dict
 import yaml
-from hparam_tuning_project.training.trainer import Trainer
-from hparam_tuning_project.data.datasets import PytorchDataset
-from hparam_tuning_project.training import build_and_fit_modules
+from hparam_tuning_project.training.utils import build_and_fit_modules
 import pytorch_lightning as pl
 from ray import air, tune
 from ray.tune.integration.pytorch_lightning import TuneReportCallback, \
@@ -15,25 +12,12 @@ from ray.tune.schedulers import ASHAScheduler
 from ray.tune import CLIReporter
 import os
 from datetime import datetime as dt
+from hparam_tuning_project.utils import load_cfg
 
 
 config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
 # config_name = "simple_training.yaml"
 # config_name = 'pytorch_classifier_mnist.yaml'
-
-
-def load_cfg(path):
-    with open(path, "r") as f:
-        cfg = yaml.safe_load(f)
-    return cfg
-
-
-def validate_cfg(cfg):
-    ### input validation
-    if 'flags' not in cfg or ('flags' in cfg and cfg['flags'] is None):
-        cfg['flags'] = dict()
-
-    return cfg
 
 
 def train_func(cfg, checkpoint_dir=None):
@@ -88,26 +72,19 @@ def run_optim(cfg, run_id,):
 
 
 def run_optim_resume(run_id):
-    print('CONTINUING RUN', run_id)
-    tuner = tune.Tuner.restore(os.path.abspath("../hparam_results/cnn2_mnist_lr_optim_20221019"))
+    tuner = tune.Tuner.restore(os.path.abspath(f"../hparam_results/{run_id}"))
     tuner.fit()
 
 
 def main():
     args = parse_args()
-    cfg = load_cfg(args.config_root + args.config_name)
-    cfg = validate_cfg(cfg)
-
-    cfg['meta'] = {
-        'entry_script': 'experiment_runner_lr_1.py',
-        'start_time': str(dt.now()),
-        'resumed': False
-    }
+    cfg = load_cfg(args.config_root + args.config_name, args)
 
     if os.path.exists(f'../hparam_results/{args.run_id}'):
         cfg['meta']['resumed'] = True
         run_optim_resume(args.run_id)
     else:
+        cfg['meta']['resumed'] = False
         run_optim(cfg, args.run_id)
 
 

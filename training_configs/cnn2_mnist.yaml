@@ -17,6 +17,7 @@ data_cfg:
   batch_size: 64
   num_workers: 8
   use_precomputed_split: True
+  split_path: /home/alex/Documents/personal-projects/hyperparameter-tuning/splits
 
 loss_cfg:
   loss_id: bce_with_logits_loss

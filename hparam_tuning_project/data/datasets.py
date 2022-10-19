@@ -9,6 +9,7 @@ from torch.utils.data.dataset import random_split
 from torch.utils.data import Subset
 from torch.utils.data import DataLoader
 import numpy as np
+import os
 
 
 class PytorchDataset(pl.LightningDataModule):
@@ -44,7 +45,8 @@ class PytorchDataset(pl.LightningDataModule):
                  train_split_size: float = 0.8,
                  dataset_path: Union[str, None] = None,
                  use_precomputed_split: bool = True,
-                 split_id: Union[str, None] = None):
+                 split_id: Union[str, None] = None,
+                 split_path: Union[str, None] = None):
         super().__init__()
 
         self.dataset_id = dataset_id
@@ -55,6 +57,7 @@ class PytorchDataset(pl.LightningDataModule):
         self.train_split_size = train_split_size
         self.use_precomputed_split = use_precomputed_split
         self.split_id = split_id
+        self.split_path = split_path
         if use_default_path:
             self.dataset_path = PATHS['dataset_path'] + dataset_id + "/"
         else:
@@ -83,8 +86,13 @@ class PytorchDataset(pl.LightningDataModule):
             else:
                 split_id = self.split_id
 
-            train_idx = np.loadtxt(f"./splits/{split_id}_train.txt")
-            val_idx = np.loadtxt(f"./splits/{split_id}_val.txt")
+            if self.split_path is None:
+                split_path = "./splits/"
+            else:
+                split_path = self.split_path
+
+            train_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_train.txt"))
+            val_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_val.txt"))
             self.train_dataset = Subset(train_val, train_idx.astype(int))
             self.val_dataset = Subset(train_val, val_idx.astype(int))
             print(self.train_dataset)
