@@ -1,11 +1,12 @@
 """Functionality to run one iteration of the experiment"""
 
 import argparse
+from distutils.command.build import build
 from typing import Dict
 import yaml
 from hparam_tuning_project.training.trainer import Trainer
 from hparam_tuning_project.data.datasets import PytorchDataset
-from hparam_tuning_project.utils import initialize_callbacks
+from hparam_tuning_project.training import build_and_fit_modules
 import pytorch_lightning as pl
 from ray import air, tune
 from ray.tune.integration.pytorch_lightning import TuneReportCallback, \
@@ -13,6 +14,8 @@ from ray.tune.integration.pytorch_lightning import TuneReportCallback, \
 from ray.tune.schedulers import ASHAScheduler
 from ray.tune import CLIReporter
 import os
+from datetime import datetime as dt
+
 
 config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
 # config_name = "simple_training.yaml"
@@ -47,25 +50,25 @@ def validate_cfg(cfg):
     return cfg
 
 
-def train_func(cfg):
-    ### Single optimization run
+def train_func(cfg, checkpoint_dir=None):
+    """Single optimization run"""
     tune_callback = TuneReportCallback({'val_loss': 'val_loss'}, on='validation_end')
 
-    # for now, try training a single model
-    dataset = PytorchDataset(**cfg['data_cfg'])
-    model = Trainer(**cfg)
-    callbacks = initialize_callbacks(cfg['callbacks'])
-    callbacks.append(tune_callback)
-    learner = pl.Trainer(**cfg['flags'], callbacks=callbacks)
-    learner.fit(model, dataset)
+    build_and_fit_modules(cfg, extra_callbacks=[tune_callback])
 
 
 def run_optim(cfg, run_id,):
+
+    ### init search space
     cfg['optimizer_cfg']['args']['lr'] = tune.loguniform(1e-6, 1e-1)
+
+    ### flags
     cfg['flags']['enable_progress_bar'] = False
-    cfg['flags']['max_epochs'] = 1
-    cfg['flags']['gpus'] = 1
-    num_epochs = 1
+    cfg['flags']['max_epochs'] = 10
+
+    ### ray tune
+    num_epochs = 10
+
     scheduler = ASHAScheduler(
         max_t=num_epochs,
         grace_period=1,
@@ -100,7 +103,7 @@ def run_optim(cfg, run_id,):
 
 def run_optim_resume(run_id):
     print('CONTINUING RUN', run_id)
-    tuner = tune.Tuner.restore(path="../hparam_results/resnet18_mnist_lr_optim_20221017")
+    tuner = tune.Tuner.restore(os.path.abspath("../hparam_results/cnn2_mnist_lr_optim_20221019"))
     tuner.fit()
 
 
@@ -109,7 +112,14 @@ def main():
     cfg = load_cfg(args.config_root + args.config_name)
     cfg = validate_cfg(cfg)
 
+    cfg['meta'] = {
+        'entry_script': 'experiment_runner_lr_1.py',
+        'start_time': str(dt.now()),
+        'resumed': False
+    }
+
     if os.path.exists(f'../hparam_results/{args.run_id}'):
+        cfg['meta']['resumed'] = True
         run_optim_resume(args.run_id)
     else:
         run_optim(cfg, args.run_id)

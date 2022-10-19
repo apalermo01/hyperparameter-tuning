@@ -18,7 +18,7 @@ def main():
 
     cfg['meta'] = {
         'entry_script': 'train_from_config.py',
-        'execution_time': str(dt.now())
+        'start_time': str(dt.now())
     }
 
     build_and_fit_modules(cfg)
