@@ -26,6 +26,8 @@ def update_cfg(old_cfg, new_cfg):
 
         # check if this is a sub-dictionary
         if isinstance(new_cfg[key], dict):
+            if key not in old_cfg:
+                old_cfg[key] = {}
             old_cfg[key] = update_cfg(old_cfg[key], new_cfg[key])
         else:
 

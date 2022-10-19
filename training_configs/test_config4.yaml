@@ -1,0 +1,15 @@
+base_cfg: test_config3.yaml
+
+key3: 
+  subkey3: "from test config 4"
+
+key4: 
+  subkey3:
+    subsubkey1:
+      item: mooo
+      item2: fizzbuzz
+    subsubkey2: foo
+    subsubkey3: bar
+    subsubkey4: baz
+    subsubkey5:
+      subsubsubkey: foobarbaz
