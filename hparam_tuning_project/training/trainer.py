@@ -1,3 +1,4 @@
+from xml.sax.handler import feature_external_ges
 import pytorch_lightning as pl
 from torchvision import datasets as ds
 from hparam_tuning_project.models.simple_models import FFN, CNN1
@@ -48,7 +49,9 @@ class Trainer(pl.LightningModule):
                  optimizer_cfg,
                  data_cfg,
                  loss_cfg,
-                 scheduler_cfg=None
+                 scheduler_cfg=None,
+                 flags=None,
+                 callbacks=None,
                  ):
         super(Trainer, self).__init__()
         self.model_cfg = model_cfg
@@ -59,6 +62,13 @@ class Trainer(pl.LightningModule):
         self.model = self.build_model()
         self.loss = self.build_loss()
 
+        self.lr = self.optimizer_cfg['args']['lr']
+
+        # storing these to self just so they're saved as hyperparams
+        self.flags = flags
+        self.callbacks = callbacks
+        self.save_hyperparameters()
+
     def forward(self, x):
         return self.model(x)
 
@@ -68,6 +78,7 @@ class Trainer(pl.LightningModule):
         target = F.one_hot(target, 10).type(torch.float32)
         loss = self.loss(pred, target)
         self.log('train_loss', loss, on_step=True, prog_bar=True)
+        return loss
 
     def validation_step(self, batch, batch_idx):
         x, target = batch
@@ -90,7 +101,8 @@ class Trainer(pl.LightningModule):
             else:
                 args = dict()
             scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](optimizer, **args)
-            return {"optimizer": optimizer, "scheduler": scheduler}
+            return [[optimizer], [scheduler]]
+            #return {"optimizer": optimizer, "scheduler": scheduler}
         return optimizer
 
     def build_model(self):

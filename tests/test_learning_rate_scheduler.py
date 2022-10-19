@@ -49,3 +49,7 @@ def test_learning_rate_scheduler():
     model = Trainer(**training_cfg)
     learner = pl.Trainer(max_epochs=2)
     learner.fit(model, dataset)
+
+
+if __name__ == '__main__':
+    test_learning_rate_scheduler()

@@ -1,5 +1,6 @@
 """Functionality to run one iteration of the experiment"""
 
+import argparse
 from typing import Dict
 import yaml
 from hparam_tuning_project.training.trainer import Trainer
@@ -11,17 +12,16 @@ from ray.tune.integration.pytorch_lightning import TuneReportCallback, \
     TuneReportCheckpointCallback
 from ray.tune.schedulers import ASHAScheduler
 from ray.tune import CLIReporter
+import os
 
-
-config_path = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
+config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
 # config_name = "simple_training.yaml"
-config_name = 'pytorch_classifier_mnist.yaml'
+# config_name = 'pytorch_classifier_mnist.yaml'
 
 
 def load_cfg(path):
     with open(path, "r") as f:
         cfg = yaml.safe_load(f)
-    # print(cfg)
     return cfg
 
 
@@ -52,18 +52,20 @@ def train_func(cfg):
     tune_callback = TuneReportCallback({'val_loss': 'val_loss'}, on='validation_end')
 
     # for now, try training a single model
-    dataset = PytorchDataset(**cfg['training_cfg']['data_cfg'])
-    model = Trainer(**cfg['training_cfg'])
+    dataset = PytorchDataset(**cfg['data_cfg'])
+    model = Trainer(**cfg)
     callbacks = initialize_callbacks(cfg['callbacks'])
     callbacks.append(tune_callback)
     learner = pl.Trainer(**cfg['flags'], callbacks=callbacks)
     learner.fit(model, dataset)
 
 
-def run_optim(cfg):
-    cfg['training_cfg']['optimizer_cfg']['args']['lr'] = tune.loguniform(1e-4, 1e-1)
+def run_optim(cfg, run_id,):
+    cfg['optimizer_cfg']['args']['lr'] = tune.loguniform(1e-6, 1e-1)
     cfg['flags']['enable_progress_bar'] = False
-    num_epochs = 2
+    cfg['flags']['max_epochs'] = 1
+    cfg['flags']['gpus'] = 1
+    num_epochs = 1
     scheduler = ASHAScheduler(
         max_t=num_epochs,
         grace_period=1,
@@ -78,11 +80,11 @@ def run_optim(cfg):
         metric='val_loss',
         mode='min',
         scheduler=scheduler,
-        num_samples=10,
+        num_samples=100,
     )
 
     run_config = air.RunConfig(
-        name='mnist_lr_optim',
+        name=run_id,
         progress_reporter=reporter,
         local_dir='../hparam_results/'
     )
@@ -96,11 +98,30 @@ def run_optim(cfg):
     tuner.fit()
 
 
+def run_optim_resume(run_id):
+    print('CONTINUING RUN', run_id)
+    tuner = tune.Tuner.restore(path="../hparam_results/resnet18_mnist_lr_optim_20221017")
+    tuner.fit()
+
+
 def main():
-    cfg = load_cfg(config_path + config_name)
+    args = parse_args()
+    cfg = load_cfg(args.config_root + args.config_name)
     cfg = validate_cfg(cfg)
 
-    run_optim(cfg)
+    if os.path.exists(f'../hparam_results/{args.run_id}'):
+        run_optim_resume(args.run_id)
+    else:
+        run_optim(cfg, args.run_id)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_root', default=config_root)
+    parser.add_argument('--config_name')
+    parser.add_argument('--run_id', required=True)
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':

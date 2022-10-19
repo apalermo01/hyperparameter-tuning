@@ -1,24 +1,24 @@
-training_cfg:
-  model_cfg:
-    model_id: CNN1
-    args:
-      input_shape: [28, 28]
-      in_channels: 1
 
-  data_cfg:
-    dataset_id: mnist
-    train: True
-    batch_size: 128
-    num_workers: 8
+model_cfg:
+  model_id: CNN1
+  args:
+    input_shape: [28, 28]
+    in_channels: 1
 
-  loss_cfg:
-    loss_id: bce_with_logits_loss
-    args:
+data_cfg:
+  dataset_id: mnist
+  train: True
+  batch_size: 128
+  num_workers: 8
 
-  optimizer_cfg:
-    optimizer_id: adam
-    args:
-      lr: 0.001
+loss_cfg:
+  loss_id: bce_with_logits_loss
+  args:
+
+optimizer_cfg:
+  optimizer_id: adam
+  args:
+    lr: 0.001
 
 flags:
   max_epochs: 10

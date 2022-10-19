@@ -1,6 +1,7 @@
 from hparam_tuning_project.training.callbacks import callback_registry
 from typing import Dict
 
+
 ### CONSTANTS
 PATHS = {
     'dataset_path': '/home/alex/datasets/'
