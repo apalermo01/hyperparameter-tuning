@@ -52,6 +52,7 @@ class Trainer(pl.LightningModule):
                  scheduler_cfg=None,
                  flags=None,
                  callbacks=None,
+                 meta=None
                  ):
         super(Trainer, self).__init__()
         self.model_cfg = model_cfg
@@ -67,6 +68,7 @@ class Trainer(pl.LightningModule):
         # storing these to self just so they're saved as hyperparams
         self.flags = flags
         self.callbacks = callbacks
+        self.meta = meta
         self.save_hyperparameters()
 
     def forward(self, x):
