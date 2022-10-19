@@ -1,0 +1,4 @@
+base_cfg: cnn2_mnist.yaml
+
+data_cfg:
+  split_id: mnist_small

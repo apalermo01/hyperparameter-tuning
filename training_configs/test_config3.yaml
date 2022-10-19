@@ -1,0 +1,8 @@
+base_cfg: test_config1.yaml
+
+key3:
+  subkey1: Goodbye
+
+key4:
+  subkey3:
+    another_item: cow
