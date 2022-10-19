@@ -1,4 +1,4 @@
 pytorch_lightning
 matplotlib
 numpy
-pytorch
+ray[tune]

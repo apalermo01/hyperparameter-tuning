@@ -23,25 +23,25 @@ class PlotMetricsCallback(Callback):
 
     def on_train_epoch_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         self.train_losses[self.epoch_num] = {}
-        return super().on_train_epoch_start(trainer, pl_module)
+        # return super().on_train_epoch_start(trainer, pl_module)
 
     def on_train_batch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", outputs: STEP_OUTPUT, batch: Any, batch_idx: int, unused: int = 0) -> None:
         if len(trainer.callback_metrics) > 0:
             self.inter_epoch_train_loss.append(trainer.callback_metrics['train_loss'].item())
-        return super().on_train_batch_end(trainer, pl_module, outputs, batch, batch_idx, unused)
+        # return super().on_train_batch_end(trainer, pl_module, outputs, batch, batch_idx, unused)
 
-    def on_train_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
-        # self.train_losses[self.epoch_num] = {
-        #     'avg': np.nanmean(self.inter_epoch_train_loss),
-        #     'std': np.nanstd(self.inter_epoch_train_loss)
-        # }
-        # print("ON TRAIN EPOCH END")
-        # self.inter_epoch_train_loss = []
-        return super().on_train_epoch_end(trainer, pl_module)
+    # def on_train_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
+    #     # self.train_losses[self.epoch_num] = {
+    #     #     'avg': np.nanmean(self.inter_epoch_train_loss),
+    #     #     'std': np.nanstd(self.inter_epoch_train_loss)
+    #     # }
+    #     # print("ON TRAIN EPOCH END")
+    #     # self.inter_epoch_train_loss = []
+    #     return super().on_train_epoch_end(trainer, pl_module)
 
     def on_validation_epoch_start(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         self.val_losses[self.epoch_num] = {}
-        return super().on_validation_epoch_start(trainer, pl_module)
+        # return super().on_validation_epoch_start(trainer, pl_module)
 
     def on_validation_batch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", Outputs: Optional[STEP_OUTPUT], batch: Any, batch_idx: int, dataloader_idx: int) -> None:
         if len(trainer.logged_metrics) > 0 and 'val_loss_step' in trainer.logged_metrics:
@@ -64,7 +64,7 @@ class PlotMetricsCallback(Callback):
         if self.epoch_num > 0:
             self.make_plots(path=trainer.log_dir)
         self.epoch_num += 1
-        return super().on_validation_epoch_end(trainer, pl_module)
+        # return super().on_validation_epoch_end(trainer, pl_module)
 
     def make_plots(self, path):
 
