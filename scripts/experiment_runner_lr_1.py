@@ -33,7 +33,7 @@ def parse_args():
     parser.add_argument("--max_epochs", default=10)
     parser.add_argument("--num_samples", default=100)
     parser.add_argument("--local_dir", default="../hparam_results/")
-    parser.add_argument("--n_cpus", default=4)
+    parser.add_argument("--n_cpus", default=2)
     parser.add_argument('--n_gpus', default=0)
     parser.add_argument("--min_lr", default=1e-6)
     parser.add_argument("--max_lr", default=1e-1)

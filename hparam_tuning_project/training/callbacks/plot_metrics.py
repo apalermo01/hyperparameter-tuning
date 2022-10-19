@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import cv2
 import os
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 
 class PlotMetricsCallback(Callback):

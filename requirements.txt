@@ -1,1 +1,4 @@
-pytorch-lightning
+pytorch_lightning
+matplotlib
+numpy
+pytorch
