@@ -3,6 +3,8 @@ base_cfg: cnn2_mnist.yaml
 model_cfg:
   args:
     in_channels: 3
+    input_shape: [32, 32]
 
 data_cfg:
   dataset_id: cifar10
+  batch_size: 16

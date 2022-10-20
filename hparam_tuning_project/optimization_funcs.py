@@ -131,29 +131,29 @@ def _run_optim_cnn2_structure(cfg,
     return results
 
 
-# def tune_lr(cfg,
-#             run_id,
-#             max_epochs=10,
-#             num_samples=100,
-#             local_dir='../hparam_results/',
-#             n_cpus=4,
-#             n_gpus=0,
-#             min_lr=1e-6,
-#             max_lr=1e-1):
+def tune_lr(cfg,
+            run_id,
+            max_epochs=10,
+            num_samples=100,
+            local_dir='../hparam_results/',
+            n_cpus=4,
+            n_gpus=0,
+            min_lr=1e-6,
+            max_lr=1e-1):
 
-#     if os.path.exists(os.path.join(local_dir, run_id)):
-#         cfg['meta']['resumed'] = True
-#         results = run_optim_resume(os.path.join(local_dir, run_id))
+    if os.path.exists(os.path.join(local_dir, run_id)):
+        cfg['meta']['resumed'] = True
+        results = run_optim_resume(os.path.join(local_dir, run_id))
 
-#     else:
-#         cfg['meta']['resumed'] = False
-#         results = _run_optim_lr(cfg, run_id, max_epochs, num_samples,
-#                                 local_dir, n_cpus, n_gpus, min_lr, max_lr)
+    else:
+        cfg['meta']['resumed'] = False
+        results = _run_optim_lr(cfg, run_id, max_epochs, num_samples,
+                                local_dir, n_cpus, n_gpus, min_lr, max_lr)
 
-#     df = results.get_dataframe()
-#     path = os.path.join(local_dir, run_id, f"results_{run_id}.csv")
-#     df.to_csv(path)
-#     print(f"results saved to {path}")
+    df = results.get_dataframe()
+    path = os.path.join(local_dir, run_id, f"results_{run_id}.csv")
+    df.to_csv(path)
+    print(f"results saved to {path}")
 
 
 # def tune_optim_cnn2_structure(cfg,
