@@ -1,4 +1,3 @@
-from xml.sax.handler import feature_external_ges
 import pytorch_lightning as pl
 from torchvision import datasets as ds
 from hparam_tuning_project.models.simple_models import FFN, CNN1
