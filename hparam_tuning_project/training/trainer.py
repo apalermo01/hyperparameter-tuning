@@ -104,7 +104,6 @@ class Trainer(pl.LightningModule):
                 args = dict()
             scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](optimizer, **args)
             return [[optimizer], [scheduler]]
-            #return {"optimizer": optimizer, "scheduler": scheduler}
         return optimizer
 
     def build_model(self):

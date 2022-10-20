@@ -1,0 +1,8 @@
+base_cfg: cnn2_mnist.yaml
+
+model_cfg:
+  args:
+    in_channels: 3
+
+data_cfg:
+  dataset_id: cifar10
