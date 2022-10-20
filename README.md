@@ -1,25 +1,20 @@
 # hyperparameter-tuning
-Experimenting with hyperparameter tuning on subset of dataset vs. full dataset
+The objective of this project is to emperically determine whether or not the best configuration obtained from running hyperparameter optimization on a subset of a dataset will also be the best configuration when training on the full dataset. If this is the case, then using a subset of the full dataset can either allow for a much more rapid optimization process or allow for a much wider search space when optimizing hyperparameters.
+
+I just finished a proof-of-concept trial to test out the training pipeline with raytune, please see the notebook '01 - analyze results from proof-of-concept runs on 20221019' for the discussion.
+
+
 
 
 # TODO
 
 - [ x ] build a simple feed forward network
 - [ x ] build a simple convolutional network
-- [ ] implement callback handling
-- [ ] train both on mnist through simple training pipeline
+- [ x ] implement callback handling
+- [ x ] conduct proof-of-concept experiment comparing learning rate optimization on mnist
+- [ ] dockerize project for portability
+- [ ] update requirements and add installation instructions
+- [ ] rethink tran/val splits (use stratified sampling and sample 100%, 75%, 50%, 25%, and 10% of dataset)
+- [ ] implement learning rate scheduling
 - [ ] change learning rate hyperparameter, and other hparams in training
 - [ ] implement data augmentation
-
-
-
-General flow of 1 experiment:
-- select a model and dataset and optimize hyperparameters. Run this sequence on both the full training dataset and a fraction of the training dataset. 
-- Compare the results of the two runs - see if there is any difference in WHAT THE BEST MODEL IS.
-
-
-
-1) build network A, do hparam optimization of full dataset. best model = model A
-2) build network A, do hparam optimization of a fraction of full dataset. best model = model B
-3) compare the selected best hyperparameters for model A and model B - how similar are they?
-4) take the hyperparameters from model B, train on full dataset - how similar are these results to model A? 
