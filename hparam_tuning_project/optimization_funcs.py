@@ -16,7 +16,8 @@ def train_func(cfg, checkpoint_dir=None):
 
 def run_optim_resume(path):
     tuner = tune.Tuner.restore(os.path.abspath(path))
-    tuner.fit()
+    results = tuner.fit()
+    return results
 
 
 def _run_optim_lr(cfg,
@@ -65,7 +66,8 @@ def _run_optim_lr(cfg,
                        tune_config=tune_cfg,
                        param_space=cfg,
                        run_config=run_config)
-    tuner.fit()
+    results = tuner.fit()
+    return results
 
 
 def tune_lr(cfg,
@@ -80,9 +82,14 @@ def tune_lr(cfg,
 
     if os.path.exists(os.path.join(local_dir, run_id)):
         cfg['meta']['resumed'] = True
-        run_optim_resume(os.path.join(local_dir, run_id))
+        results = run_optim_resume(os.path.join(local_dir, run_id))
 
     else:
         cfg['meta']['resumed'] = False
-        _run_optim_lr(cfg, run_id, max_epochs, num_samples,
-                      local_dir, n_cpus, n_gpus, min_lr, max_lr)
+        results = _run_optim_lr(cfg, run_id, max_epochs, num_samples,
+                                local_dir, n_cpus, n_gpus, min_lr, max_lr)
+
+    df = results.get_dataframe()
+    path = os.path.join(local_dir, run_id, f"results_{run_id}.csv")
+    df.to_csv(path)
+    print(f"results saved to {path}")
