@@ -8,9 +8,9 @@ I just finished a proof-of-concept trial to test out the training pipeline with 
 
 # TODO
 
-- [ x ] build a simple feed forward network
-- [ x ] build a simple convolutional network
-- [ x ] implement callback handling
+- [x] build a simple feed forward network
+- [x] build a simple convolutional network
+- [x] implement callback handling
 - [x] conduct proof-of-concept experiment comparing learning rate optimization on mnist
 - [ ] dockerize project for portability
 - [ ] update requirements and add installation instructions
