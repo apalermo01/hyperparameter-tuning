@@ -11,7 +11,7 @@ I just finished a proof-of-concept trial to test out the training pipeline with 
 - [ x ] build a simple feed forward network
 - [ x ] build a simple convolutional network
 - [ x ] implement callback handling
-- [ x ] conduct proof-of-concept experiment comparing learning rate optimization on mnist
+- [x] conduct proof-of-concept experiment comparing learning rate optimization on mnist
 - [ ] dockerize project for portability
 - [ ] update requirements and add installation instructions
 - [ ] rethink tran/val splits (use stratified sampling and sample 100%, 75%, 50%, 25%, and 10% of dataset)
