@@ -21,7 +21,10 @@ def check_classes(dataset, train_idxs, val_idxs, targets):
         # calculate percentage of train indices with this class
         print(f"% of train dataset with class {c}: {(train_labels[train_labels==c.item()].shape[0]/train_labels.shape[0])*100:.4f}%; " + \
               f"% of val dataset with class {c}: {(val_labels[val_labels==c.item()].shape[0]/val_labels.shape[0])*100:.4f}%")
+    
+    print(f"intersect of train / val (should be empty): ", np.intersect1d(train_idxs, val_idxs))
     print('\n\n')
+    
 
 def main():
     args = parse_args()
