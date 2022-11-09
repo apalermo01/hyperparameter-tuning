@@ -10,7 +10,7 @@ RUN \
 	conda env create -f environment.yml && \
 	conda activate hparam_project && \
 	conda clean -a && \
-	pip install torch torchvision torchaudio --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu116 && \
+	conda install pytorch torchvision torchaudio cpuonly -c pytorch && \
 	pip install --editable . 
 
 
