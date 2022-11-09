@@ -4,13 +4,27 @@ The objective of this project is to emperically determine whether or not the bes
 I just finished a proof-of-concept trial to test out the training pipeline with raytune, please see the notebook '01 - analyze results from proof-of-concept runs on 20221019' for the discussion.
 
 # Docker setup
-To set up the dependancies in a docker container, run:
+To set up the dependancies in a docker container, do:
 
+build the image:
 ```bash
 docker build --tag hparam_project .
 ```
 
+start the container:
+```bash
+docker run --gpus all --name hparam hparam_project tail -f /dev/null
+```
 
+open a bash terminal inside the container:
+```
+docker exec -it hparam bash
+```
+
+while inside the container, activate the conda environment
+```bash
+conda activate hparam_project
+```
 # TODO
 
 - [x] build a simple feed forward network
