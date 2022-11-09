@@ -13,6 +13,11 @@ def main():
     args = parse_args()
     cfg = load_cfg(args.config_root + args.config_name, args)
 
+    split_id = args.split_id
+    if split_id is not None:
+        cfg['data_cfg']['split_id'] = split_id
+        print("[INFO] setting split id in config to ", split_id)
+
     tune_lr(cfg,
             run_id=args.run_id,
             max_epochs=args.max_epochs,
@@ -21,7 +26,8 @@ def main():
             n_cpus=args.n_cpus,
             n_gpus=args.n_gpus,
             min_lr=args.min_lr,
-            max_lr=args.max_lr)
+            max_lr=args.max_lr,
+            test=args.test)
 
 
 def parse_args():
@@ -37,6 +43,8 @@ def parse_args():
     parser.add_argument('--n_gpus', default=0)
     parser.add_argument("--min_lr", default=1e-6)
     parser.add_argument("--max_lr", default=1e-1)
+    parser.add_argument("--split_id", default=None)
+    parser.add_argument("--test", action='store_true', default=False)
     args = parser.parse_args()
     return args
 

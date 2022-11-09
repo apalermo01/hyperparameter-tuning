@@ -28,7 +28,8 @@ def _run_optim_lr(cfg,
                   n_cpus=4,
                   n_gpus=0,
                   min_lr=1e-6,
-                  max_lr=1e-1):
+                  max_lr=1e-1,
+                  test=False):
 
     ### init search space
     cfg['optimizer_cfg']['args']['lr'] = tune.loguniform(min_lr, max_lr)
@@ -36,6 +37,12 @@ def _run_optim_lr(cfg,
     ### flags
     cfg['flags']['enable_progress_bar'] = False
     cfg['flags']['max_epochs'] = max_epochs
+
+    ### set up test case
+    if test:
+        num_samples = 2
+        cfg['flags']['max_epochs'] = 1
+        cfg['flags']['fast_dev_run'] = True
 
     scheduler = ASHAScheduler(
         max_t=max_epochs,
@@ -139,16 +146,25 @@ def tune_lr(cfg,
             n_cpus=4,
             n_gpus=0,
             min_lr=1e-6,
-            max_lr=1e-1):
+            max_lr=1e-1,
+            test=False):
 
-    if os.path.exists(os.path.join(local_dir, run_id)):
+    if os.path.exists(os.path.join(local_dir, run_id)) and not test:
         cfg['meta']['resumed'] = True
         results = run_optim_resume(os.path.join(local_dir, run_id))
 
     else:
         cfg['meta']['resumed'] = False
-        results = _run_optim_lr(cfg, run_id, max_epochs, num_samples,
-                                local_dir, n_cpus, n_gpus, min_lr, max_lr)
+        results = _run_optim_lr(cfg,
+                                run_id,
+                                max_epochs,
+                                num_samples,
+                                local_dir,
+                                n_cpus,
+                                n_gpus,
+                                min_lr,
+                                max_lr,
+                                test)
 
     df = results.get_dataframe()
     path = os.path.join(local_dir, run_id, f"results_{run_id}.csv")
