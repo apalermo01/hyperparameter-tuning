@@ -3,7 +3,12 @@ The objective of this project is to emperically determine whether or not the bes
 
 I just finished a proof-of-concept trial to test out the training pipeline with raytune, please see the notebook '01 - analyze results from proof-of-concept runs on 20221019' for the discussion.
 
+# Docker setup
+To set up the dependancies in a docker container, run:
 
+```bash
+docker build --tag hparam_project .
+```
 
 
 # TODO
@@ -12,9 +17,9 @@ I just finished a proof-of-concept trial to test out the training pipeline with 
 - [x] build a simple convolutional network
 - [x] implement callback handling
 - [x] conduct proof-of-concept experiment comparing learning rate optimization on mnist
-- [ ] dockerize project for portability
+- [x] dockerize project for portability
 - [ ] update requirements and add installation instructions
-- [ ] rethink tran/val splits (use stratified sampling and sample 100%, 75%, 50%, 25%, and 10% of dataset)
+- [x] rethink tran/val splits (use stratified sampling and sample 100%, 75%, 50%, 25%, and 10% of dataset)
 - [ ] implement learning rate scheduling
 - [ ] change learning rate hyperparameter, and other hparams in training
 - [ ] implement data augmentation
