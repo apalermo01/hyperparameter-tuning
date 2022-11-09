@@ -1,5 +1,0 @@
-pytorch_lightning
-matplotlib
-numpy
-ray[tune]
-pandas 
