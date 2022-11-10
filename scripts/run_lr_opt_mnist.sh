@@ -8,4 +8,5 @@ do
     python scripts/experiment_runner_lr_1.py \
         --config_name cnn2_mnist.yaml \
         --run_id lr_opt_20221109_${split_id}
+        --root_dir linode_path
 done
