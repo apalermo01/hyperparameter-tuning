@@ -9,7 +9,7 @@ from datetime import datetime as dt
 PATHS = {
     'dataset_path': '/home/alex/datasets/',
     'ap_local_path': '/home/alex/Documents/personal-projects/hyperparameter_tuning/',
-    'linode_path': '/home/hyperparameter_tuning/',
+    'linode_path': '/home/',
 }
 
 
