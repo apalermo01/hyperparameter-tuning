@@ -6,7 +6,7 @@ import os
 from hparam_tuning_project.utils import load_cfg
 from hparam_tuning_project.optimization_funcs import tune_lr
 
-config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
+config_root = "training_configs/"
 
 
 def main():
@@ -35,7 +35,6 @@ def parse_args():
     parser.add_argument('--config_root', default=config_root)
     parser.add_argument('--config_name')
     parser.add_argument('--run_id', required=True)
-
     parser.add_argument("--max_epochs", default=10)
     parser.add_argument("--num_samples", default=100)
     parser.add_argument("--local_dir", default="../hparam_results/")

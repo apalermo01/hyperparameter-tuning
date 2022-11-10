@@ -8,8 +8,9 @@ dependencies:
     - jupyter
     - scikit-learn
     - pip
+    - pillow=9.2.0
     - pip:
-        - opencv-python
+        - opencv-python-headless
         - pytorch-lightning
         - ray[tune]
         - tqdm

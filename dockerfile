@@ -11,7 +11,7 @@ RUN \
 	conda env create -f environment.yml && \
 	conda activate hparam_project && \
 	conda clean -a && \
-	conda install pytorch torchvision>=0.5.0 torchaudio cpuonly -c pytorch && \
+	conda install pytorch=1.13.0 torchvision=0.14 torchaudio cpuonly -c pytorch && \
 	pip install --editable . 
 
 
