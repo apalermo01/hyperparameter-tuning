@@ -5,6 +5,7 @@ import yaml
 import os
 from hparam_tuning_project.utils import load_cfg
 from hparam_tuning_project.optimization_funcs import tune_lr
+from hparam_tuning_project.utils import PATHS
 
 config_root = "training_configs/"
 
@@ -12,6 +13,13 @@ config_root = "training_configs/"
 def main():
     args = parse_args()
     cfg = load_cfg(args.config_root + args.config_name, args)
+
+    if args.root_dir in PATHS:
+        root_dir = PATHS[args.root_dir]
+    else:
+        root_dir = args.root_dir
+
+    cfg['data_cfg']['root_dir'] = root_dir
 
     split_id = args.split_id
     if split_id is not None:
@@ -27,7 +35,7 @@ def main():
             n_gpus=args.n_gpus,
             min_lr=args.min_lr,
             max_lr=args.max_lr,
-            test=args.test)
+            test=args.test,)
 
 
 def parse_args():
@@ -43,7 +51,8 @@ def parse_args():
     parser.add_argument("--min_lr", default=1e-6)
     parser.add_argument("--max_lr", default=1e-1)
     parser.add_argument("--split_id", default=None)
-    parser.add_argument("--test", action='store_true', default=False)
+    parser.add_argument("--test", action='store_true', default=False,)
+    parser.add_argument("--root_dir", required=True)
     args = parser.parse_args()
     return args
 

@@ -46,9 +46,10 @@ class PytorchDataset(pl.LightningDataModule):
                  dataset_path: Union[str, None] = None,
                  use_precomputed_split: bool = True,
                  split_id: Union[str, None] = None,
-                 split_path: Union[str, None] = None):
+                 split_path: Union[str, None] = None,
+                 root_dir=None):
         super().__init__()
-
+        self.root_dir = root_dir
         self.dataset_id = dataset_id
         self.transform = transforms.Compose([transforms.ToTensor()])
         self.train = train
@@ -86,13 +87,13 @@ class PytorchDataset(pl.LightningDataModule):
             else:
                 split_id = self.split_id
 
-            if self.split_path is None:
-                split_path = "./splits/"
-            else:
-                split_path = self.split_path
+            # if self.split_path is None:
+            #     split_path = "./splits/"
+            # else:
+            #     split_path = self.split_path
 
-            train_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_train.txt"))
-            val_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_val.txt"))
+            train_idx = np.loadtxt(os.path.join(self.root_dir, f"splits/{split_id}_train.txt"))
+            val_idx = np.loadtxt(os.path.join(self.root_dir, f"splits/{split_id}_val.txt"))
             self.train_dataset = Subset(train_val, train_idx.astype(int))
             self.val_dataset = Subset(train_val, val_idx.astype(int))
             # print(self.train_dataset)
