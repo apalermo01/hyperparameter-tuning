@@ -11,6 +11,6 @@ dependencies:
     - pillow=9.2.0
     - pip:
         - opencv-python-headless
-        - pytorch-lightning=1.6.5
+        - pytorch-lightning==1.6.5
         - ray[tune]
         - tqdm
