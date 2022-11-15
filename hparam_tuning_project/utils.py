@@ -4,11 +4,15 @@ import yaml
 import os
 import __main__
 from datetime import datetime as dt
+import boto3
 
 ### CONSTANTS
 PATHS = {
-    'dataset_path': '/home/alex/datasets/'
+    'dataset_path': '/home/alex/datasets/',
+    'ap_local_path': '/home/alex/Documents/personal-projects/hyperparameter_tuning/',
+    'linode_path': '/home/',
 }
+
 
 
 def initialize_callbacks(cfg):
@@ -70,3 +74,7 @@ def load_cfg(path, namespace_args=None):
         cfg['flags'] = dict()
 
     return cfg
+
+
+def move_results_to_linode_storage(results_path: str):
+    pass

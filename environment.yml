@@ -13,3 +13,4 @@ dependencies:
         - pytorch-lightning
         - ray[tune]
         - tqdm
+        - boto3
