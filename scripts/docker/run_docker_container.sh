@@ -12,6 +12,6 @@ docker run \
     --name hparam \
     --mount type=bind,\
             source=$hostdir,\
-            destination=/home/hparam_results
+            destination=/home/hparam_results \
     hparam_project \
     tail -f /dev/null
