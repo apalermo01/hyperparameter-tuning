@@ -3,7 +3,7 @@
 # the file path specified 
 
 read -p "directory on host machine for bind mount: " hostdir
-if [ -d "$hostdir" ]; then
+if [ ! -d "$hostdir" ]; then
     mkdir $hostdir
 fi
 
