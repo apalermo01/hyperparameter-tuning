@@ -1,13 +1,13 @@
+import matplotlib
+matplotlib.use('Agg')
 from pytorch_lightning.callbacks import Callback
 import pytorch_lightning as pl
 from typing import Any, Optional
 from pytorch_lightning.utilities.types import STEP_OUTPUT
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 import cv2
 import os
-matplotlib.use('Agg')
 
 
 class PlotMetricsCallback(Callback):

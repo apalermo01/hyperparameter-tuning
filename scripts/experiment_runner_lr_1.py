@@ -1,8 +1,5 @@
 """Functionality to run one iteration of the experiment"""
 import argparse
-from typing import Dict
-import yaml
-import os
 from hparam_tuning_project.utils import load_cfg
 from hparam_tuning_project.optimization_funcs import tune_lr
 
@@ -32,7 +29,7 @@ def parse_args():
 
     parser.add_argument("--max_epochs", default=10)
     parser.add_argument("--num_samples", default=100)
-    parser.add_argument("--local_dir", default="../hparam_results/")
+    parser.add_argument("--output_dir", default="../hparam_results/")
     parser.add_argument("--n_cpus", default=2)
     parser.add_argument('--n_gpus', default=0)
     parser.add_argument("--min_lr", default=1e-6)

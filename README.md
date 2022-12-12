@@ -15,7 +15,10 @@ start the container:
 ```bash
 docker run --gpus all --name hparam hparam_project tail -f /dev/null
 ```
-
+start container with volume attached:
+```bash
+docker run -d -v --name hparam hparam_project tail -f /dev/null
+```
 open a bash terminal inside the container:
 ```
 docker exec -it hparam bash
