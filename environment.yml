@@ -13,7 +13,7 @@ dependencies:
     - pip
     - pip:
         - opencv-python
-        - pytorch-lightning
+        - pytorch-lightning==1.6
         - ray[tune]
         - tqdm
         - boto3
