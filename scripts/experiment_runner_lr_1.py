@@ -4,14 +4,15 @@ Runs 1 trial of the hyperparameter tuning experimet by adjusting learning rate
 import argparse
 from hparam_tuning_project.utils import load_cfg
 from hparam_tuning_project.optimization_modules.learning_rate import tune_lr
+import os
 
-config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
+
+config_root = "./training_configs/"
 
 
 def main():
     args = parse_args()
     cfg = load_cfg(args.config_root + args.config_name, args)
-
     tune_lr(cfg,
             run_id=args.run_id,
             max_epochs=args.max_epochs,
@@ -20,7 +21,7 @@ def main():
             n_cpus=args.n_cpus,
             n_gpus=args.n_gpus,
             min_lr=args.min_lr,
-            max_lr=args.max_lr)
+            max_lr=args.max_lr,)
 
 
 def parse_args():

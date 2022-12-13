@@ -14,7 +14,6 @@ PATHS = {
 }
 
 
-
 def initialize_callbacks(cfg):
     callbacks = []
     for call in cfg:
@@ -73,6 +72,7 @@ def load_cfg(path, namespace_args=None):
     if 'flags' not in cfg or ('flags' in cfg and cfg['flags'] is None):
         cfg['flags'] = dict()
 
+    cfg['data_cfg']['workdir'] = os.getcwd()
     return cfg
 
 
