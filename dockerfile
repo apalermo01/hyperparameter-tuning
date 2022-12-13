@@ -1,16 +1,11 @@
-FROM condaforge/mambaforge:4.9.2-5
-WORKDIR /home/hparam_project/
+# FROM ubuntu:20.04
+FROM continuumio/miniconda3
+WORKDIR /home/projects/hparam_project/
 COPY . .
-RUN apt-get --allow-releaseinfo-change update
-# RUN apt-get install vim
-RUN \
-	pip install -U pip && \
-	pip install --upgrade pip && \
-        .  /root/.bashrc && \
-	conda init bash && \
-	conda env create -f environment.yml && \
-	conda activate hparam_project && \
-	conda clean -a && \
-	pip install torch torchvision torchaudio --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu117 && \
-	pip install --editable . 
 
+# RUN conda env create -f environment.yml
+# RUN echo "source activate $(head -1 environment.yml | cut -d ' ' -f2)" > ~/.bashrc
+# ENV PATH /opt/conda/envs/$(head -1 environment.yml | cut -d ' ' -f2)/bin:$PATH
+# RUN pip install --editable .
+# RUN conda install pytorch torchvision torchaudio cpuonly -c pytorch
+# https://medium.com/@chadlagore/conda-environments-with-docker-82cdc9d25754

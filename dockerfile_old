@@ -1,0 +1,18 @@
+FROM condaforge/mambaforge:4.9.2-5
+# FROM continuumio/miniconda3
+FROM pytorchlightning/pytorch_lightning 
+WORKDIR /home/projects/hparam_project/
+COPY . .
+RUN apt-get --allow-releaseinfo-change update
+
+RUN \
+	pip install -U pip && \
+	pip install --upgrade pip && \
+        .  /root/.bashrc && \
+	conda init bash && \
+	conda env create -f environment.yml && \
+	conda activate hparam_project && \
+	conda clean -a && \
+# 	pip install torch torchvision torchaudio --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cu117 && \
+	pip install --editable . 
+
