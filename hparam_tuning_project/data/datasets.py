@@ -46,7 +46,8 @@ class PytorchDataset(pl.LightningDataModule):
                  dataset_path: Union[str, None] = None,
                  use_precomputed_split: bool = True,
                  split_id: Union[str, None] = None,
-                 split_path: Union[str, None] = None):
+                 split_path: Union[str, None] = None,
+                 workdir: str = None):
         super().__init__()
 
         self.dataset_id = dataset_id
@@ -58,6 +59,7 @@ class PytorchDataset(pl.LightningDataModule):
         self.use_precomputed_split = use_precomputed_split
         self.split_id = split_id
         self.split_path = split_path
+        self.workdir = workdir
         if use_default_path:
             self.dataset_path = PATHS['dataset_path'] + dataset_id + "/"
         else:
@@ -87,7 +89,13 @@ class PytorchDataset(pl.LightningDataModule):
                 split_id = self.split_id
 
             if self.split_path is None:
-                split_path = "./splits/"
+                # When running ray tune, the working directory is set to the results directory
+                # as a result, we can't use a relative path to get the split directory
+                # so, we tatke the workdir input argument and append that
+                # workdir should be the current working directory in the entry script before
+                # we start messing with ray tune
+                # TODO: add this to documentation / docstrings
+                split_path = os.path.join(self.workdir, "splits")
             else:
                 split_path = self.split_path
 

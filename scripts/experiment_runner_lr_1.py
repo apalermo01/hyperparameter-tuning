@@ -1,31 +1,34 @@
-"""Functionality to run one iteration of the experiment"""
+"""
+Runs 1 trial of the hyperparameter tuning experimet by adjusting learning rate
+"""
 import argparse
 from hparam_tuning_project.utils import load_cfg
-from hparam_tuning_project.optimization_funcs import tune_lr
+from hparam_tuning_project.optimization_modules.learning_rate import tune_lr
+import os
 
-config_root = "/home/alex/Documents/personal-projects/hyperparameter-tuning/training_configs/"
+
+config_root = "./training_configs/"
 
 
 def main():
     args = parse_args()
     cfg = load_cfg(args.config_root + args.config_name, args)
-
     tune_lr(cfg,
             run_id=args.run_id,
             max_epochs=args.max_epochs,
             num_samples=args.num_samples,
-            local_dir=args.local_dir,
+            output_dir=args.output_dir,
             n_cpus=args.n_cpus,
             n_gpus=args.n_gpus,
             min_lr=args.min_lr,
-            max_lr=args.max_lr)
+            max_lr=args.max_lr,)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_root', default=config_root)
-    parser.add_argument('--config_name')
-    parser.add_argument('--run_id', required=True)
+    parser.add_argument('--config_name', default='cnn2_mnist.yaml')
+    parser.add_argument('--run_id', default='test_run')
 
     parser.add_argument("--max_epochs", default=10)
     parser.add_argument("--num_samples", default=100)

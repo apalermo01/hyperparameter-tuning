@@ -3,6 +3,7 @@ channels:
     - defaults
     - conda-forge
 dependencies:
+    - python=3.10
     - numpy
     - pandas
     - matplotlib
@@ -12,8 +13,8 @@ dependencies:
     - torchvision
     - pip
     - pip:
-        - opencv-python
-        - pytorch-lightning
+        - opencv-python-headless
+        - pytorch-lightning==1.6
         - ray[tune]
         - tqdm
         - boto3
