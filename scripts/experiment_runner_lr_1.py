@@ -13,6 +13,8 @@ config_root = "./training_configs/"
 def main():
     args = parse_args()
     cfg = load_cfg(args.config_root + args.config_name, args)
+    if len(args.split_id) > 0:
+        cfg['data_cfg']['split_id'] = args.split_id
     tune_lr(cfg,
             run_id=args.run_id,
             max_epochs=args.max_epochs,
@@ -37,6 +39,7 @@ def parse_args():
     parser.add_argument('--n_gpus', default=0)
     parser.add_argument("--min_lr", default=1e-6)
     parser.add_argument("--max_lr", default=1e-1)
+    parser.add_argument('--split_id', default='')
     args = parser.parse_args()
     return args
 
