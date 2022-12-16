@@ -4,7 +4,6 @@ Runs 1 trial of the hyperparameter tuning experimet by adjusting learning rate
 import argparse
 from hparam_tuning_project.utils import load_cfg
 from hparam_tuning_project.optimization_modules.learning_rate import tune_lr
-import os
 
 
 config_root = "./training_configs/"
