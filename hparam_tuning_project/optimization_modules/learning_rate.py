@@ -8,8 +8,11 @@ import os
 from typing import Dict
 
 
-def train_func(cfg: Dict,):
+def train_func(cfg: Dict, test_mode=False):
     """Single optimization run"""
+    if test_mode:
+        return build_and_fit_modules(cfg)
+
     tune_callback = TuneReportCallback({'val_loss': 'val_loss'},
                                        on='validation_end')
 
@@ -31,7 +34,8 @@ def _run_optim_lr(cfg: Dict,
                   n_cpus: int = 4,
                   n_gpus: int = 0,
                   min_lr: float = 1e-6,
-                  max_lr: float = 1e-1):
+                  max_lr: float = 1e-1,
+                  test_mode: bool = False):
     """Runs lr optimization
 
     Parameters
@@ -59,6 +63,10 @@ def _run_optim_lr(cfg: Dict,
     -------
     ray tune results
     """
+    if test_mode:
+        cfg['flags']['fast_dev_run'] = True
+        train_func(cfg, test_mode=True)
+        return
     ### init search space
     cfg['optimizer_cfg']['args']['lr'] = tune.loguniform(min_lr, max_lr)
 
@@ -90,7 +98,6 @@ def _run_optim_lr(cfg: Dict,
     )
 
     train_fn = tune.with_resources(train_func, {'cpu': n_cpus, 'gpu': n_gpus})
-
     tuner = tune.Tuner(train_fn,
                        tune_config=tune_cfg,
                        param_space=cfg,
@@ -108,7 +115,9 @@ def tune_lr(cfg: Dict,
             n_gpus: int = 0,
             min_lr: float = 1e-6,
             max_lr: float = 1e-1,
-            force_restart: bool = False):
+            force_restart: bool = False,
+            test_mode: bool = False,):
+    
     """Run full hyperparameter tuning experiment, saves results to a csv
 
     Parameters
@@ -132,15 +141,17 @@ def tune_lr(cfg: Dict,
     max_lr : float, optional
         maximum lr to use, by default 1e-1
     """
-    if os.path.exists(os.path.join(output_dir, run_id)) and not force_restart:
+
+    if os.path.exists(os.path.join(output_dir, run_id)) and not force_restart and not test_mode:
         cfg['meta']['resumed'] = True
         results = run_optim_resume(os.path.join(output_dir, run_id))
 
     else:
         cfg['meta']['resumed'] = False
         results = _run_optim_lr(cfg, run_id, max_epochs, num_samples,
-                                output_dir, n_cpus, n_gpus, min_lr, max_lr)
-
+                                output_dir, n_cpus, n_gpus, min_lr, max_lr, test_mode)
+    if test_mode:
+        return
     df = results.get_dataframe()
     path = os.path.join(output_dir, run_id, f"results_{run_id}.csv")
     df.to_csv(path)
