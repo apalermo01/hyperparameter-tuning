@@ -14,7 +14,7 @@ do
         echo "running split $split_id, config name is ${configs[$i]}, model id is ${model_ids[$i]}"
         python scripts/experiment_runner_lr_1 \
              --config_name ${config_id[$i]} \
-             --run_id lr_opt_20221217_${model_ids[$i]}_${split_id}
+             --run_id lr_opt_20221217_${model_ids[$i]}_${split_id} \
              --split_id ${split_id}
 
 
