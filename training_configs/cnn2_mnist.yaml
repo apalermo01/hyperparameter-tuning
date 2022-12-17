@@ -14,10 +14,10 @@ model_cfg:
 data_cfg:
   dataset_id: mnist
   train: True
-  batch_size: 64
+  batch_size: 32
   num_workers: 8
   use_precomputed_split: True
-  split_path: /home/alex/Documents/personal-projects/hyperparameter-tuning/splits
+
 
 loss_cfg:
   loss_id: bce_with_logits_loss

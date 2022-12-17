@@ -24,7 +24,6 @@ optimizer_cfg:
 flags:
   max_epochs: 10
   default_root_dir: ../hparam_results/
-  gpus: 1
 
 callbacks:
   - early_stop:

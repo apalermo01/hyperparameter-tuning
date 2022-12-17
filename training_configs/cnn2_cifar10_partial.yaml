@@ -1,4 +1,0 @@
-base_cfg: cnn2_cifar10.yaml
-
-data_cfg:
-  split_id: cifar10_small

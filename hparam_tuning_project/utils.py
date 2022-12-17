@@ -4,10 +4,13 @@ import yaml
 import os
 import __main__
 from datetime import datetime as dt
+import boto3
 
 ### CONSTANTS
 PATHS = {
-    'dataset_path': '/home/alex/datasets/'
+    'dataset_path': '/home/alex/datasets/',
+    'ap_local_path': '/home/alex/Documents/personal-projects/hyperparameter_tuning/',
+    'linode_path': '/home/',
 }
 
 
@@ -69,4 +72,9 @@ def load_cfg(path, namespace_args=None):
     if 'flags' not in cfg or ('flags' in cfg and cfg['flags'] is None):
         cfg['flags'] = dict()
 
+    cfg['data_cfg']['workdir'] = os.getcwd()
     return cfg
+
+
+def move_results_to_linode_storage(results_path: str):
+    pass
