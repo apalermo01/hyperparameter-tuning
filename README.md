@@ -48,3 +48,8 @@ s3cmd put /hparam_results/lr_opt_20221109_mnist/* s3://hparam-project/hparam_res
 https://www.linode.com/docs/products/storage/object-storage/guides/s3cmd
 
 
+- next steps 20221217
+
+- cifar10 + cnn2
+- mnist + resnet18
+- cifar10 + resnet18

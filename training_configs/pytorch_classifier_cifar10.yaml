@@ -1,0 +1,15 @@
+base_cfg: pytorch_classifier_mnist.yaml
+
+model_cfg:
+  model_id: torch_classifier
+  args:
+    num_input_channels: 3
+
+data_cfg:
+  dataset_id: cifar10
+  batch_size: 16
+  num_workers: 8
+
+loss_cfg:
+  loss_id: bce_with_logits_loss
+  args:
