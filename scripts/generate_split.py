@@ -17,6 +17,9 @@ def check_classes(dataset, train_idxs, val_idxs, targets):
     train_labels = np.array([i[1] for i in train_dataset])
     val_labels = np.array([i[1] for i in val_dataset])
 
+    # print("targets: ", targets)
+    # print("type of targets", type(targets))
+    # assert False
     for c in torch.unique(targets):
         # calculate percentage of train indices with this class
         print(f"% of train dataset with class {c}: {(train_labels[train_labels==c.item()].shape[0]/train_labels.shape[0])*100:.4f}%; "
@@ -39,6 +42,8 @@ def main():
 
     # do the train test split, stratifying on target classes
     targets = dataset.targets
+    if isinstance(targets, list):
+        targets = torch.tensor(targets)
     train_idxs, val_idxs = train_test_split(idxes, train_size=0.8, stratify=targets)
 
     print("=" * 80)
