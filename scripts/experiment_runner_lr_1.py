@@ -22,7 +22,8 @@ def main():
             n_cpus=args.n_cpus,
             n_gpus=args.n_gpus,
             min_lr=args.min_lr,
-            max_lr=args.max_lr,)
+            max_lr=args.max_lr,
+            force_restart=args.force_restart)
 
 
 def parse_args():
@@ -39,6 +40,7 @@ def parse_args():
     parser.add_argument("--min_lr", default=1e-6)
     parser.add_argument("--max_lr", default=1e-1)
     parser.add_argument('--split_id', default='')
+    parser.add_argument("--force_restart", action="store_true")
     args = parser.parse_args()
     return args
 

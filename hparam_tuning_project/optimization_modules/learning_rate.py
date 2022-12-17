@@ -107,7 +107,8 @@ def tune_lr(cfg: Dict,
             n_cpus: int = 4,
             n_gpus: int = 0,
             min_lr: float = 1e-6,
-            max_lr: float = 1e-1):
+            max_lr: float = 1e-1,
+            force_restart: bool = False):
     """Run full hyperparameter tuning experiment, saves results to a csv
 
     Parameters
@@ -131,7 +132,7 @@ def tune_lr(cfg: Dict,
     max_lr : float, optional
         maximum lr to use, by default 1e-1
     """
-    if os.path.exists(os.path.join(output_dir, run_id)):
+    if os.path.exists(os.path.join(output_dir, run_id)) and not force_restart:
         cfg['meta']['resumed'] = True
         results = run_optim_resume(os.path.join(output_dir, run_id))
 
