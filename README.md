@@ -53,3 +53,8 @@ https://www.linode.com/docs/products/storage/object-storage/guides/s3cmd
 - cifar10 + cnn2
 - mnist + resnet18
 - cifar10 + resnet18
+
+Download files from linode:
+scp <linode username>@<linode ip>:/path/to/linode/file /path/to/local/file
+
+for a directory, use the -r flag
