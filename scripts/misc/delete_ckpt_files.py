@@ -4,7 +4,7 @@ Removing checkpoint files from dowloaded checkpoints to save space
 
 import os
 
-PATH = "/home/alex/datasets/hparam_results_20221228"
+PATH = "/home/alex/datasets/hparam_results/"
 
 
 def main():
