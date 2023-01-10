@@ -29,6 +29,7 @@ def run_opt(model_id: str,
             'dataset_id': dataset_id,
             'model_id': model_id,
             'split_id': split_id,
+            'split_perc': s,
             'best_lrs': best_lrs,
         })
         break
