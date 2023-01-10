@@ -40,7 +40,6 @@ def main():
             force_restart=args.force_restart,
             test_mode=args.test_mode)
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_root', default=config_root)
