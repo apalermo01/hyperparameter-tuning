@@ -10,7 +10,7 @@ fi
 docker run \
     -d \
     --name hparam \
-    --mount type=bind,source=$hostdir,destination=/home/projects/hparam_results \
+    --mount type=bind,source=$hostdir,destination=/home/projects/hparam_project/run_results \
     --shm-size=4gb \
     hparam_project \
     tail -f /dev/null
