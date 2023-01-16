@@ -7,4 +7,3 @@ model_cfg:
 
 data_cfg:
   dataset_id: cifar10
-  batch_size: 16

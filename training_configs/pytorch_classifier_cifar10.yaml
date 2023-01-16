@@ -7,8 +7,6 @@ model_cfg:
 
 data_cfg:
   dataset_id: cifar10
-  batch_size: 16
-  num_workers: 1
 
 loss_cfg:
   loss_id: bce_with_logits_loss
