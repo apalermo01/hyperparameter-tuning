@@ -9,8 +9,8 @@ model_cfg:
 data_cfg:
   dataset_id: mnist
   train: True
-  batch_size: 128
-  num_workers: 8
+  batch_size: 16
+  num_workers: 1
 
 loss_cfg:
   loss_id: bce_with_logits_loss
