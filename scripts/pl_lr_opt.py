@@ -32,7 +32,6 @@ def run_opt(model_id: str,
             'split_perc': s,
             'best_lrs': best_lrs,
         })
-        break
 
     return results
 
@@ -48,9 +47,7 @@ def main():
                               dataset_id=d,
                               num_samples=num_samples,
                               results=results)
-            break
-        break
-    
+
     with open("./run_results/pl_lr_optim_20230109.json", "w") as f:
         json.dump(results, f, indent=2)
 
