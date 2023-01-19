@@ -48,8 +48,8 @@ def main():
                               num_samples=num_samples,
                               results=results)
 
-    with open("./run_results/pl_lr_optim_20230109.json", "w") as f:
-        json.dump(results, f, indent=2)
+            with open(f"./run_results/pl_lr_optim-model={m}-dataset={d}_20230118.json", "w") as f:
+                json.dump(results, f, indent=2)
 
 if __name__ == '__main__':
     main()
