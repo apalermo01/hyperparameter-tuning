@@ -99,15 +99,18 @@ class PytorchDataset(pl.LightningDataModule):
             else:
                 split_path = self.split_path
 
-            train_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_train.txt"))
-            val_idx = np.loadtxt(os.path.join(split_path, f"{split_id}_val.txt"))
+            train_idx = np.loadtxt(os.path.join(
+                split_path, f"{split_id}_train.txt"))
+            val_idx = np.loadtxt(os.path.join(
+                split_path, f"{split_id}_val.txt"))
             self.train_dataset = Subset(train_val, train_idx.astype(int))
             self.val_dataset = Subset(train_val, val_idx.astype(int))
             # print(self.train_dataset)
         else:
             train_size = int(self.train_split_size * len(train_val))
             val_size = len(train_val) - train_size
-            self.train_dataset, self.val_dataset = random_split(train_val, [train_size, val_size])
+            self.train_dataset, self.val_dataset = random_split(
+                train_val, [train_size, val_size])
         # print(self.train_dataset)
         # assert False
 

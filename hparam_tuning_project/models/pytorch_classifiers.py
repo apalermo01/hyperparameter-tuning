@@ -90,7 +90,8 @@ class TorchClassifier(nn.Module):
                  **kwargs):
 
         super(TorchClassifier, self).__init__()
-        self.model = self.pytorch_classifier_registry[architecture_id](pretrained=pretrained, **kwargs)
+        self.model = self.pytorch_classifier_registry[architecture_id](
+            pretrained=pretrained, **kwargs)
 
         # replace the last fully connected layer if there are a different number of classes
         if num_classes != 1000:
@@ -149,4 +150,3 @@ class TorchClassifier(nn.Module):
 
     def forward(self, x):
         return self.model(x)
-

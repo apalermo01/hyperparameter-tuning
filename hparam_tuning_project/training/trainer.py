@@ -94,14 +94,16 @@ class Trainer(pl.LightningModule):
             args = self.optimizer_cfg['args']
         else:
             args = dict()
-        optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(), **args)
+        optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](
+            self.model.parameters(), **args)
 
         if self.scheduler_cfg is not None:
             if self.scheduler_cfg['args'] is not None:
                 args = self.scheduler_cfg['args']
             else:
                 args = dict()
-            scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](optimizer, **args)
+            scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](
+                optimizer, **args)
             return [[optimizer], [scheduler]]
         return optimizer
 

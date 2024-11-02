@@ -7,6 +7,7 @@ from collections import OrderedDict
 
 class FFN(nn.Module):
     """A simple feed-forward network with 3 layers"""
+
     def __init__(self, num_in, num_out=10):
         super(FFN, self).__init__()
         self.fc1 = nn.Linear(num_in, 1024)
@@ -38,7 +39,8 @@ class CNN1(nn.Module):
         super(CNN1, self).__init__()
         self.input_shape = input_shape
         self.in_channels = in_channels
-        conv1 = nn.Conv2d(in_channels=self.in_channels, out_channels=ch1, kernel_size=3)
+        conv1 = nn.Conv2d(in_channels=self.in_channels,
+                          out_channels=ch1, kernel_size=3)
         bn1 = nn.BatchNorm2d(ch1)
         conv2 = nn.Conv2d(in_channels=ch1, out_channels=ch2, kernel_size=3)
         bn2 = nn.BatchNorm2d(ch2)
@@ -100,7 +102,8 @@ class CNN1(nn.Module):
         return x
 
     def calculate_linear_shape(self):
-        test = self.conv_layers(torch.rand(1, self.in_channels, self.input_shape[0], self.input_shape[1]))
+        test = self.conv_layers(torch.rand(
+            1, self.in_channels, self.input_shape[0], self.input_shape[1]))
         size = test.size()
         m = 1
         for i in size:
