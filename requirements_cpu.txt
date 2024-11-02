@@ -1,0 +1,15 @@
+numpy
+pandas
+matplotlib
+jupyter
+scikit-learn
+opencv-python-headless
+lightning
+ray[tune]
+tqdm
+boto3
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio

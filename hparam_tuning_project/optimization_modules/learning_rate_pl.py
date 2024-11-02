@@ -1,5 +1,4 @@
 """
-Third iteration of learning rate optimization
 Uses the pytorch lightning learning rate finder to find the best learning rate
 """
 
