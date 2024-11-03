@@ -4,10 +4,9 @@ import yaml
 import os
 import __main__
 from datetime import datetime as dt
-import boto3
 
 # CONSTANTS
-PATHS = {
+PATHS: Dict = {
     'dataset_path': '/home/alex/datasets/',
     'ap_local_path': '/home/alex/Documents/personal-projects/hyperparameter_tuning/',
     'linode_path': '/home/',

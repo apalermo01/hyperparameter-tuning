@@ -2,10 +2,10 @@ import os
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from pytorch_lightning.utilities.types import STEP_OUTPUT
+from lightning.pytorch.utilities.types import STEP_OUTPUT
 from typing import Any, Optional
-import pytorch_lightning as pl
-from pytorch_lightning.callbacks import Callback
+import lightning.pytorch as pl
+from lightning.pytorch.callbacks import Callback
 import matplotlib
 matplotlib.use('Agg')
 
@@ -30,7 +30,7 @@ class PlotMetricsCallback(Callback):
     def on_train_batch_end(self,
                            trainer: "pl.Trainer",
                            pl_module: "pl.LightningModule",
-                           outputs: STEP_OUTPUT,
+                           outputs,
                            batch: Any,
                            batch_idx: int,
                            unused: int = 0) -> None:
@@ -63,6 +63,7 @@ class PlotMetricsCallback(Callback):
                                 batch_idx: int,
                                 # dataloader_idx: int
                                 ) -> None:
+
         if len(trainer.logged_metrics) > 0 and \
                 'val_loss_step' in trainer.logged_metrics:
             self.inter_epoch_val_loss.append(

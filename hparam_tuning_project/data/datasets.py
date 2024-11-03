@@ -1,5 +1,5 @@
 from typing import Union
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 from torchvision import datasets as ds
 from torch.utils.data import Dataset
 from torchvision import transforms
