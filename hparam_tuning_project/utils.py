@@ -6,7 +6,7 @@ import __main__
 from datetime import datetime as dt
 import boto3
 
-### CONSTANTS
+# CONSTANTS
 PATHS = {
     'dataset_path': '/home/alex/datasets/',
     'ap_local_path': '/home/alex/Documents/personal-projects/hyperparameter_tuning/',
@@ -44,7 +44,8 @@ def _open_cfg(path):
         cfg = yaml.safe_load(f)
 
     if 'base_cfg' in cfg:
-        base_cfg = _open_cfg(os.path.join(os.path.split(path)[0], cfg['base_cfg']))
+        base_cfg = _open_cfg(os.path.join(
+            os.path.split(path)[0], cfg['base_cfg']))
         _ = cfg.pop('base_cfg')
 
         # looping through modified config options in cfg

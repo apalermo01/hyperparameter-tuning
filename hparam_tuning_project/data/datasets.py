@@ -47,7 +47,8 @@ class PytorchDataset(pl.LightningDataModule):
                  use_precomputed_split: bool = True,
                  split_id: Union[str, None] = None,
                  split_path: Union[str, None] = None,
-                 workdir: str = None):
+                 workdir: Union[str, None] = None):
+
         super().__init__()
 
         self.dataset_id = dataset_id
@@ -59,11 +60,19 @@ class PytorchDataset(pl.LightningDataModule):
         self.use_precomputed_split = use_precomputed_split
         self.split_id = split_id
         self.split_path = split_path
+
+        if workdir is None:
+            workdir = os.getcwd()
         self.workdir = workdir
+
         if use_default_path:
             self.dataset_path = PATHS['dataset_path'] + dataset_id + "/"
         else:
-            assert dataset_path is not None, "if you don't want to use the default path, you should pass the path you want to dataset_path"
+
+            assert dataset_path is not None, \
+                "if you don't want to use the default path, " +\
+                "you should pass the path you want to dataset_path"
+
             self.dataset_path = dataset_path
 
         self.vision_dataset = self.dataset_registry[self.dataset_id](
@@ -83,6 +92,7 @@ class PytorchDataset(pl.LightningDataModule):
         )
 
         if self.use_precomputed_split:
+
             if self.split_id is None:
                 split_id = self.dataset_id
             else:
@@ -96,13 +106,16 @@ class PytorchDataset(pl.LightningDataModule):
                 # we start messing with ray tune
                 # TODO: add this to documentation / docstrings
                 split_path = os.path.join(self.workdir, "splits")
+
             else:
                 split_path = self.split_path
 
             train_idx = np.loadtxt(os.path.join(
                 split_path, f"{split_id}_train.txt"))
+
             val_idx = np.loadtxt(os.path.join(
                 split_path, f"{split_id}_val.txt"))
+
             self.train_dataset = Subset(train_val, train_idx.astype(int))
             self.val_dataset = Subset(train_val, val_idx.astype(int))
             # print(self.train_dataset)

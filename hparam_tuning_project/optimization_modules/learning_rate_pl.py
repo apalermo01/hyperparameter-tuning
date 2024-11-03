@@ -3,9 +3,7 @@ Uses the pytorch lightning learning rate finder to find the best learning rate
 """
 
 from hparam_tuning_project.training.utils import build_modules
-import os
 from typing import Dict
-import numpy as np
 
 
 def tune_lr(cfg: Dict,

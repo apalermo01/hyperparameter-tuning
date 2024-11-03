@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL filesG
 __pycache__/
 *.py[cod]
 *$py.class
@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # logs
-lightning_logs/*
+**/lightning_logs/*
+*.ckpt
