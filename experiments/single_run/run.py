@@ -5,7 +5,7 @@ from typing import List, Dict
 
 
 def main():
-    cfg_root: str = "experiments/single_run/training_configs/"
+    cfg_root: str = "./experiments/single_run/training_configs/"
     cfg_path: str = os.path.join(cfg_root, "pytorch_classifier_mnist.yaml")
     with open(cfg_path, "r") as f:
         cfg: Dict = yaml.safe_load(f)

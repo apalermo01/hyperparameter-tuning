@@ -24,8 +24,6 @@ def train_func(config):
         strategy=RayDDPStrategy()
     )
     learner = prepare_trainer(learner)
-    print("learner = ", learner)
-    print("model = ", model)
     learner.fit(model, dataset)
 
 
@@ -37,6 +35,7 @@ def tune_lr(cfg: Dict,
     cfg['flags']['enable_progress_bar'] = False
 
     extra_callbacks = []
+
     # best_lrs = []
     train_loop_config = {
         'cfg': cfg,
@@ -50,7 +49,7 @@ def tune_lr(cfg: Dict,
     run_config = RunConfig(
         checkpoint_config=CheckpointConfig(
             num_to_keep=2,
-            checkpoint_score_attribute="ptl/val_accuracy",
+            checkpoint_score_attribute="val_loss",
             checkpoint_score_order="max"
         )
     )
@@ -64,7 +63,7 @@ def tune_lr(cfg: Dict,
         ray_trainer,
         param_space={"train_loop_config": search_space},
         tune_config=tune.TuneConfig(
-            metric="ptl/val_accuracy",
+            metric="val_loss",
             mode="max",
             num_samples=num_samples,
             scheduler=scheduler

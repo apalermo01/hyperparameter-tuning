@@ -26,6 +26,8 @@ def main(cfg):
 
 if __name__ == '__main__':
     results_dir = "experiments/opt_single_lr/results.json"
+    with open('./experiments/opt_single_lr/results.json', 'w') as f:
+        pass
     if os.path.exists(results_dir):
         with open(results_dir) as f:
             results = json.load(f)
@@ -54,5 +56,5 @@ if __name__ == '__main__':
         ret['full_cfg'] = cfg
         results[key] = ret
 
-        with open('experiments/opt_single_lr/results.json') as f:
+        with open('./experiments/opt_single_lr/results.json', 'a') as f:
             json.dump(results, f, indent=2)
