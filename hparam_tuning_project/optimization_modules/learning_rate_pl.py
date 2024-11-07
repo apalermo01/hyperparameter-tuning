@@ -71,3 +71,10 @@ def tune_lr(cfg: Dict,
     )
 
     tuner.fit()
+
+    results = {
+        'all_metrics': tuner().get_results().get_dataframe().to_dict(),
+        'best_metrics': tuner().get_results().get_best_results().metrics
+    }
+
+    return results

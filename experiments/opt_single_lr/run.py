@@ -15,24 +15,24 @@ def main(cfg):
         }
     }
 
-    best_lrs = tune_lr(cfg=cfg, num_samples=10, search_space=search_space)
+    results = tune_lr(cfg=cfg, num_samples=10, search_space=search_space)
 
     return {
         'model_id': cfg['model_cfg']['model_id'],
         'split_perc': split,
-        'best_lrs': best_lrs
+        'results': results
     }
 
 
 if __name__ == '__main__':
     results_dir = "experiments/opt_single_lr/results.json"
-    with open('./experiments/opt_single_lr/results.json', 'w') as f:
-        pass
     if os.path.exists(results_dir):
         with open(results_dir) as f:
             results = json.load(f)
     else:
         results = {}
+        with open('results_dir', 'w') as f:
+            json.dump(results, f, indent=2)
 
     for path in os.listdir("experiments/opt_single_lr/training_configs/"):
         if path[0] == '_':
@@ -56,5 +56,5 @@ if __name__ == '__main__':
         ret['full_cfg'] = cfg
         results[key] = ret
 
-        with open('./experiments/opt_single_lr/results.json', 'a') as f:
+        with open(results_dir, 'a') as f:
             json.dump(results, f, indent=2)
