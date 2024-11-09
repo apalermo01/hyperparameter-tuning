@@ -1,4 +1,4 @@
-from hparam_tuning_project.optimization_modules.learning_rate_pl import tune_lr
+from hparam_tuning_project.optimization_modules.ray_optimize import run_tuner
 import os
 import yaml
 import json
@@ -15,7 +15,7 @@ def main(cfg):
         }
     }
 
-    results = tune_lr(cfg=cfg, num_samples=10, search_space=search_space)
+    results = run_tuner(cfg=cfg, num_samples=10, search_space=search_space)
 
     return {
         'model_id': cfg['model_cfg']['model_id'],
@@ -25,20 +25,20 @@ def main(cfg):
 
 
 if __name__ == '__main__':
-    results_dir = "experiments/opt_single_lr/results.json"
+    results_dir = "experiments/basic_lr_run_20241109/results.json"
     if os.path.exists(results_dir):
         with open(results_dir) as f:
-            results = json.load(f)
+            results = yaml.safe_load(f)
     else:
         results = {}
-        with open('results_dir', 'w') as f:
-            json.dump(results, f, indent=2)
 
     for path in os.listdir("experiments/opt_single_lr/training_configs/"):
         if path[0] == '_':
             continue
 
-        with open(os.path.join("./experiments/opt_single_lr/training_configs/", path), "r") as f:
+        with open(os.path.join(
+            "./experiments/opt_single_lr/training_configs/",
+                path), "r") as f:
             cfg = yaml.safe_load(f)
 
         key = path.split('.')[0]
@@ -56,5 +56,5 @@ if __name__ == '__main__':
         ret['full_cfg'] = cfg
         results[key] = ret
 
-        with open(results_dir, 'a') as f:
-            json.dump(results, f, indent=2)
+        with open(results_dir, 'w') as f:
+            yaml.dump(results, f, indent=2)

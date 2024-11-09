@@ -27,10 +27,10 @@ def train_func(config):
     learner.fit(model, dataset)
 
 
-def tune_lr(cfg: Dict,
-            search_space: Dict,
-            num_samples: int = 10,
-            num_epochs=10):
+def run_tuner(cfg: Dict,
+              search_space: Dict,
+              num_samples: int = 10,
+              num_epochs=10):
 
     cfg['flags']['enable_progress_bar'] = False
 
@@ -73,8 +73,8 @@ def tune_lr(cfg: Dict,
     tuner.fit()
 
     results = {
-        'all_metrics': tuner().get_results().get_dataframe().to_dict(),
-        'best_metrics': tuner().get_results().get_best_results().metrics
+        'all_metrics': tuner.get_results().get_dataframe().to_dict(),
+        'best_metrics': tuner.get_results().get_best_result().metrics
     }
 
     return results
