@@ -32,7 +32,7 @@ def train_func(config):
 def run_tuner(cfg: Dict,
               search_space: Dict,
               num_samples: int = 10,
-              num_epochs: int = 10,
+              num_epochs: int = 20,
               ret_tuner: bool = False):
 
     # ray.init(_memory=12 * 1024 ** 3)
@@ -55,7 +55,7 @@ def run_tuner(cfg: Dict,
         checkpoint_config=CheckpointConfig(
             num_to_keep=2,
             checkpoint_score_attribute="val_loss",
-            checkpoint_score_order="max"
+            checkpoint_score_order="min"
         )
     )
     ray_trainer = TorchTrainer(
