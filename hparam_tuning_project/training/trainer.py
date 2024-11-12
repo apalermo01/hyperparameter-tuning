@@ -1,13 +1,9 @@
-import pytorch_lightning as pl
-from torchvision import datasets as ds
-from hparam_tuning_project.models.simple_models import FFN, CNN1
-
+import lightning.pytorch as pl
 import torch.nn.functional as F
 import torch
 from torch import optim
 from torch.optim import lr_scheduler
 from torch.nn import BCEWithLogitsLoss
-
 from ..models import model_registry
 
 
@@ -40,7 +36,7 @@ loss_registry = {
 }
 
 
-class Trainer(pl.LightningModule):
+class LightningTrainer(pl.LightningModule):
     """Trainer for the hyperparameter tuning project"""
 
     def __init__(self,
@@ -53,7 +49,7 @@ class Trainer(pl.LightningModule):
                  callbacks=None,
                  meta=None
                  ):
-        super(Trainer, self).__init__()
+        super(LightningTrainer, self).__init__()
         self.model_cfg = model_cfg
         self.optimizer_cfg = optimizer_cfg
         self.data_cfg = data_cfg
@@ -94,14 +90,16 @@ class Trainer(pl.LightningModule):
             args = self.optimizer_cfg['args']
         else:
             args = dict()
-        optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](self.model.parameters(), **args)
+        optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](
+            self.model.parameters(), **args)
 
         if self.scheduler_cfg is not None:
             if self.scheduler_cfg['args'] is not None:
                 args = self.scheduler_cfg['args']
             else:
                 args = dict()
-            scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](optimizer, **args)
+            scheduler = scheduler_registry[self.scheduler_cfg['scheduler_id']](
+                optimizer, **args)
             return [[optimizer], [scheduler]]
         return optimizer
 

@@ -1,5 +1,5 @@
 FROM python:3.10-slim-buster
-WORKDIR /home/projects/hparam_project/
+WORKDIR ./
 COPY requirements.txt .
 RUN apt update
 RUN pip install -r requirements.txt

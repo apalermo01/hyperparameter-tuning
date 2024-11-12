@@ -14,13 +14,15 @@ split_mappings = {
 }
 cfg_path = "./training_configs/"
 
+
 def run_opt(model_id: str,
             dataset_id: str,
             num_samples: int,
             results: list) -> dict:
 
     splits = [100, 75, 50, 25, 10]
-    cfg = load_cfg(path=os.path.join(cfg_path, f"{model_id}_{dataset_id}.yaml"))
+    cfg = load_cfg(path=os.path.join(
+        cfg_path, f"{model_id}_{dataset_id}.yaml"))
     for s in splits:
         split_id = dataset_id + split_mappings[s]
         cfg['data_cfg']['split_id'] = split_id
@@ -48,8 +50,9 @@ def main():
                               num_samples=num_samples,
                               results=results)
 
-            with open(f"./run_results/pl_lr_optim-model={m}-dataset={d}_20230118.json", "w") as f:
+            with open(f"./run_results/pl_lr_optim-model={m}-dataset={d}_20241102.json", "w") as f:
                 json.dump(results, f, indent=2)
+
 
 if __name__ == '__main__':
     main()
