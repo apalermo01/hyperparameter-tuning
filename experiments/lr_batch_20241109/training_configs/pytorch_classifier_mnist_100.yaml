@@ -7,7 +7,7 @@ data_cfg:
   batch_size: 16
   dataset_id: mnist
   num_workers: 3
-  split_id: mnist_0_25
+  split_id: mnist
   train: true
   use_precomputed_split: true
   workdir: /home/alex/Documents/git/hyperparameter-tuning/
