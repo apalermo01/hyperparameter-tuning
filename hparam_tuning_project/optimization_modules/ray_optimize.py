@@ -1,5 +1,6 @@
 from hparam_tuning_project.training.utils import build_modules
 from typing import Dict
+import ray
 from ray import tune
 from ray.tune.schedulers import ASHAScheduler
 from ray.train.torch import TorchTrainer
@@ -10,6 +11,7 @@ from ray.train.lightning import (
     RayDDPStrategy
 )
 from ray.train import RunConfig, CheckpointConfig
+import time
 
 
 def train_func(config):
@@ -30,7 +32,10 @@ def train_func(config):
 def run_tuner(cfg: Dict,
               search_space: Dict,
               num_samples: int = 10,
-              num_epochs=10):
+              num_epochs: int = 10,
+              ret_tuner: bool = False):
+
+    ray.init(_memory=12 * 1024 ** 3)
 
     cfg['flags']['enable_progress_bar'] = False
 
@@ -44,7 +49,7 @@ def run_tuner(cfg: Dict,
 
     # for _ in range(num_samples):
     scheduler = ASHAScheduler(max_t=num_epochs,
-                              grace_period=1,
+                              grace_period=3,
                               reduction_factor=2)
     run_config = RunConfig(
         checkpoint_config=CheckpointConfig(
@@ -66,15 +71,28 @@ def run_tuner(cfg: Dict,
             metric="val_loss",
             mode="max",
             num_samples=num_samples,
-            scheduler=scheduler
+            scheduler=scheduler,
+            max_concurrent_trials=4,
+            reuse_actors=True
         )
     )
 
     tuner.fit()
 
     results = {
-        'all_metrics': tuner.get_results().get_dataframe().to_dict(),
-        'best_metrics': tuner.get_results().get_best_result().metrics
+        'epoch_metrics': tuner.get_results().get_dataframe().to_dict(
+            orient='index'),
+        'best_metrics': tuner.get_results().get_best_result().metrics,
+
+        'iteration_metrics': {r.metrics.get('experiment_tag', f'unknown_experiment_tag_{i}'):
+                              r.metrics_dataframe.to_dict(orient='index')
+                              for i, r in enumerate(tuner.get_results())}
     }
 
-    return results
+    ray.shutdown()
+    time.sleep(15)
+
+    if ret_tuner:
+        return results, tuner
+    else:
+        return results

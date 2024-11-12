@@ -1,0 +1,406 @@
+pytorch_classifier_mnist_10:
+  dataset_id: mnist
+  full_cfg:
+    callbacks:
+    - early_stop:
+        mode: min
+        monitor: val_loss
+    - plot_metrics: null
+    data_cfg:
+      batch_size: 16
+      dataset_id: mnist
+      num_workers: 3
+      split_id: mnist_0_1
+      train: true
+      use_precomputed_split: true
+      workdir: /home/alex/Documents/github/hyperparameter-tuning/
+    flags:
+      default_root_dir: ./experiments/single_run/
+      enable_progress_bar: false
+      max_epochs: 10
+    loss_cfg:
+      args: null
+      loss_id: bce_with_logits_loss
+    model_cfg:
+      args:
+        batch_norm: true
+        ch1: 8
+        ch2: 16
+        ch3: 64
+        dropout: true
+        in_channels: 1
+        input_shape:
+        - 28
+        - 28
+        lin1: 128
+        n_classes: 10
+      model_id: CNN2
+    optimizer_cfg:
+      args:
+        lr: 0.001
+      optimizer_id: adam
+  model_id: CNN2
+  results:
+    best_metrics:
+      checkpoint_dir_name: checkpoint_000001
+      config:
+        train_loop_config:
+          optimizer_cfg:
+            args:
+              lr: 8.7885468284472e-05
+      date: 2024-11-09_13-00-08
+      done: true
+      epoch: 1
+      experiment_tag: 0_lr=0.0001
+      hostname: eddie
+      iterations_since_restore: 2
+      node_ip: 192.168.1.242
+      pid: 63335
+      should_checkpoint: true
+      step: 600
+      time_since_restore: 24.713274717330933
+      time_this_iter_s: 8.60071063041687
+      time_total_s: 24.713274717330933
+      timestamp: 1731175208
+      train_loss: 0.015053669922053814
+      training_iteration: 2
+      trial_id: 6181c_00000
+      val_loss: 0.022870223969221115
+      val_loss_epoch: 0.022870223969221115
+    epoch_metrics:
+      0:
+        checkpoint_dir_name: checkpoint_000001
+        config/train_loop_config/optimizer_cfg/args/lr: 8.7885468284472e-05
+        date: 2024-11-09_13-00-08
+        done: true
+        epoch: 1
+        hostname: eddie
+        iterations_since_restore: 2
+        logdir: 6181c_00000
+        node_ip: 192.168.1.242
+        pid: 63335
+        should_checkpoint: true
+        step: 600
+        time_since_restore: 24.713274717330933
+        time_this_iter_s: 8.60071063041687
+        time_total_s: 24.713274717330933
+        timestamp: 1731175208
+        train_loss: 0.015053669922053814
+        training_iteration: 2
+        trial_id: 6181c_00000
+        val_loss: 0.022870223969221115
+        val_loss_epoch: 0.022870223969221115
+      1:
+        checkpoint_dir_name: checkpoint_000001
+        config/train_loop_config/optimizer_cfg/args/lr: 9.866558924612423e-05
+        date: 2024-11-09_13-00-08
+        done: true
+        epoch: 1
+        hostname: eddie
+        iterations_since_restore: 2
+        logdir: 6181c_00001
+        node_ip: 192.168.1.242
+        pid: 63336
+        should_checkpoint: true
+        step: 600
+        time_since_restore: 24.518022537231445
+        time_this_iter_s: 8.211673498153687
+        time_total_s: 24.518022537231445
+        timestamp: 1731175208
+        train_loss: 0.01901264861226082
+        training_iteration: 2
+        trial_id: 6181c_00001
+        val_loss: 0.022370068356394768
+        val_loss_epoch: 0.022370068356394768
+    iteration_metrics:
+      0_lr=0.0001:
+        0:
+          checkpoint_dir_name: checkpoint_000000
+          config/train_loop_config/optimizer_cfg/args/lr: 8.7885468284472e-05
+          date: 2024-11-09_12-59-59
+          done: false
+          epoch: 0
+          hostname: eddie
+          iterations_since_restore: 1
+          node_ip: 192.168.1.242
+          pid: 63335
+          should_checkpoint: true
+          step: 300
+          time_since_restore: 16.112564086914062
+          time_this_iter_s: 16.112564086914062
+          time_total_s: 16.112564086914062
+          timestamp: 1731175199
+          train_loss: 0.05260421708226204
+          training_iteration: 1
+          trial_id: 6181c_00000
+          val_loss: 0.037117186933755875
+          val_loss_epoch: 0.037117186933755875
+        1:
+          checkpoint_dir_name: checkpoint_000001
+          config/train_loop_config/optimizer_cfg/args/lr: 8.7885468284472e-05
+          date: 2024-11-09_13-00-08
+          done: true
+          epoch: 1
+          hostname: eddie
+          iterations_since_restore: 2
+          node_ip: 192.168.1.242
+          pid: 63335
+          should_checkpoint: true
+          step: 600
+          time_since_restore: 24.713274717330933
+          time_this_iter_s: 8.60071063041687
+          time_total_s: 24.713274717330933
+          timestamp: 1731175208
+          train_loss: 0.015053669922053814
+          training_iteration: 2
+          trial_id: 6181c_00000
+          val_loss: 0.022870223969221115
+          val_loss_epoch: 0.022870223969221115
+      1_lr=0.0001:
+        0:
+          checkpoint_dir_name: checkpoint_000000
+          config/train_loop_config/optimizer_cfg/args/lr: 9.866558924612423e-05
+          date: 2024-11-09_13-00-00
+          done: false
+          epoch: 0
+          hostname: eddie
+          iterations_since_restore: 1
+          node_ip: 192.168.1.242
+          pid: 63336
+          should_checkpoint: true
+          step: 300
+          time_since_restore: 16.30634903907776
+          time_this_iter_s: 16.30634903907776
+          time_total_s: 16.30634903907776
+          timestamp: 1731175200
+          train_loss: 0.03366668149828911
+          training_iteration: 1
+          trial_id: 6181c_00001
+          val_loss: 0.038747869431972504
+          val_loss_epoch: 0.038747869431972504
+        1:
+          checkpoint_dir_name: checkpoint_000001
+          config/train_loop_config/optimizer_cfg/args/lr: 9.866558924612423e-05
+          date: 2024-11-09_13-00-08
+          done: true
+          epoch: 1
+          hostname: eddie
+          iterations_since_restore: 2
+          node_ip: 192.168.1.242
+          pid: 63336
+          should_checkpoint: true
+          step: 600
+          time_since_restore: 24.518022537231445
+          time_this_iter_s: 8.211673498153687
+          time_total_s: 24.518022537231445
+          timestamp: 1731175208
+          train_loss: 0.01901264861226082
+          training_iteration: 2
+          trial_id: 6181c_00001
+          val_loss: 0.022370068356394768
+          val_loss_epoch: 0.022370068356394768
+  split_id: '10'
+  split_perc: '10'
+pytorch_classifier_mnist_25:
+  dataset_id: mnist
+  full_cfg:
+    callbacks:
+    - early_stop:
+        mode: min
+        monitor: val_loss
+    - plot_metrics: null
+    data_cfg:
+      batch_size: 16
+      dataset_id: mnist
+      num_workers: 3
+      split_id: mnist_0_25
+      train: true
+      use_precomputed_split: true
+      workdir: /home/alex/Documents/github/hyperparameter-tuning/
+    flags:
+      default_root_dir: ./experiments/single_run/
+      enable_progress_bar: false
+      max_epochs: 10
+    loss_cfg:
+      args: null
+      loss_id: bce_with_logits_loss
+    model_cfg:
+      args:
+        batch_norm: true
+        ch1: 8
+        ch2: 16
+        ch3: 64
+        dropout: true
+        in_channels: 1
+        input_shape:
+        - 28
+        - 28
+        lin1: 128
+        n_classes: 10
+      model_id: CNN2
+    optimizer_cfg:
+      args:
+        lr: 0.001
+      optimizer_id: adam
+  model_id: CNN2
+  results:
+    best_metrics:
+      checkpoint_dir_name: checkpoint_000001
+      config:
+        train_loop_config:
+          optimizer_cfg:
+            args:
+              lr: 1.433420916134379e-05
+      date: 2024-11-09_13-01-10
+      done: true
+      epoch: 1
+      experiment_tag: 1_lr=0.0000
+      hostname: eddie
+      iterations_since_restore: 2
+      node_ip: 192.168.1.242
+      pid: 63870
+      should_checkpoint: true
+      step: 1500
+      time_since_restore: 50.27119469642639
+      time_this_iter_s: 18.987621784210205
+      time_total_s: 50.27119469642639
+      timestamp: 1731175270
+      train_loss: 0.022107545286417007
+      training_iteration: 2
+      trial_id: 7518b_00001
+      val_loss: 0.01612982712686062
+      val_loss_epoch: 0.01612982712686062
+    epoch_metrics:
+      0:
+        checkpoint_dir_name: checkpoint_000001
+        config/train_loop_config/optimizer_cfg/args/lr: 0.08220567887911945
+        date: 2024-11-09_13-01-09
+        done: true
+        epoch: 1
+        hostname: eddie
+        iterations_since_restore: 2
+        logdir: 7518b_00000
+        node_ip: 192.168.1.242
+        pid: 63871
+        should_checkpoint: true
+        step: 1500
+        time_since_restore: 49.691492319107056
+        time_this_iter_s: 18.907588481903076
+        time_total_s: 49.691492319107056
+        timestamp: 1731175269
+        train_loss: 0.0182354599237442
+        training_iteration: 2
+        trial_id: 7518b_00000
+        val_loss: 0.014215908013284206
+        val_loss_epoch: 0.014215908013284206
+      1:
+        checkpoint_dir_name: checkpoint_000001
+        config/train_loop_config/optimizer_cfg/args/lr: 1.433420916134379e-05
+        date: 2024-11-09_13-01-10
+        done: true
+        epoch: 1
+        hostname: eddie
+        iterations_since_restore: 2
+        logdir: 7518b_00001
+        node_ip: 192.168.1.242
+        pid: 63870
+        should_checkpoint: true
+        step: 1500
+        time_since_restore: 50.27119469642639
+        time_this_iter_s: 18.987621784210205
+        time_total_s: 50.27119469642639
+        timestamp: 1731175270
+        train_loss: 0.022107545286417007
+        training_iteration: 2
+        trial_id: 7518b_00001
+        val_loss: 0.01612982712686062
+        val_loss_epoch: 0.01612982712686062
+    iteration_metrics:
+      0_lr=0.0822:
+        0:
+          checkpoint_dir_name: checkpoint_000000
+          config/train_loop_config/optimizer_cfg/args/lr: 0.08220567887911945
+          date: 2024-11-09_13-00-50
+          done: false
+          epoch: 0
+          hostname: eddie
+          iterations_since_restore: 1
+          node_ip: 192.168.1.242
+          pid: 63871
+          should_checkpoint: true
+          step: 750
+          time_since_restore: 30.78390383720398
+          time_this_iter_s: 30.78390383720398
+          time_total_s: 30.78390383720398
+          timestamp: 1731175250
+          train_loss: 0.046828363090753555
+          training_iteration: 1
+          trial_id: 7518b_00000
+          val_loss: 0.021181926131248474
+          val_loss_epoch: 0.021181926131248474
+        1:
+          checkpoint_dir_name: checkpoint_000001
+          config/train_loop_config/optimizer_cfg/args/lr: 0.08220567887911945
+          date: 2024-11-09_13-01-09
+          done: true
+          epoch: 1
+          hostname: eddie
+          iterations_since_restore: 2
+          node_ip: 192.168.1.242
+          pid: 63871
+          should_checkpoint: true
+          step: 1500
+          time_since_restore: 49.691492319107056
+          time_this_iter_s: 18.907588481903076
+          time_total_s: 49.691492319107056
+          timestamp: 1731175269
+          train_loss: 0.0182354599237442
+          training_iteration: 2
+          trial_id: 7518b_00000
+          val_loss: 0.014215908013284206
+          val_loss_epoch: 0.014215908013284206
+      1_lr=0.0000:
+        0:
+          checkpoint_dir_name: checkpoint_000000
+          config/train_loop_config/optimizer_cfg/args/lr: 1.433420916134379e-05
+          date: 2024-11-09_13-00-51
+          done: false
+          epoch: 0
+          hostname: eddie
+          iterations_since_restore: 1
+          node_ip: 192.168.1.242
+          pid: 63870
+          should_checkpoint: true
+          step: 750
+          time_since_restore: 31.283572912216187
+          time_this_iter_s: 31.283572912216187
+          time_total_s: 31.283572912216187
+          timestamp: 1731175251
+          train_loss: 0.014741460792720318
+          training_iteration: 1
+          trial_id: 7518b_00001
+          val_loss: 0.02174951508641243
+          val_loss_epoch: 0.02174951508641243
+        1:
+          checkpoint_dir_name: checkpoint_000001
+          config/train_loop_config/optimizer_cfg/args/lr: 1.433420916134379e-05
+          date: 2024-11-09_13-01-10
+          done: true
+          epoch: 1
+          hostname: eddie
+          iterations_since_restore: 2
+          node_ip: 192.168.1.242
+          pid: 63870
+          should_checkpoint: true
+          step: 1500
+          time_since_restore: 50.27119469642639
+          time_this_iter_s: 18.987621784210205
+          time_total_s: 50.27119469642639
+          timestamp: 1731175270
+          train_loss: 0.022107545286417007
+          training_iteration: 2
+          trial_id: 7518b_00001
+          val_loss: 0.01612982712686062
+          val_loss_epoch: 0.01612982712686062
+  split_id: '25'
+  split_perc: '25'

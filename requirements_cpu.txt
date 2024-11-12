@@ -2,10 +2,12 @@ numpy
 pandas
 matplotlib
 jupyter
+jupyterlab-vim
 scikit-learn
 opencv-python-headless
 lightning
 ray[tune]
+ray[default]
 tqdm
 boto3
 
