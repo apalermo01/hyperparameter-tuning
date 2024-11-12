@@ -35,7 +35,7 @@ def run_tuner(cfg: Dict,
               num_epochs: int = 10,
               ret_tuner: bool = False):
 
-    ray.init(_memory=12 * 1024 ** 3)
+    # ray.init(_memory=12 * 1024 ** 3)
 
     cfg['flags']['enable_progress_bar'] = False
 
@@ -49,7 +49,7 @@ def run_tuner(cfg: Dict,
 
     # for _ in range(num_samples):
     scheduler = ASHAScheduler(max_t=num_epochs,
-                              grace_period=3,
+                              grace_period=1,
                               reduction_factor=2)
     run_config = RunConfig(
         checkpoint_config=CheckpointConfig(
@@ -69,10 +69,10 @@ def run_tuner(cfg: Dict,
         param_space={"train_loop_config": search_space},
         tune_config=tune.TuneConfig(
             metric="val_loss",
-            mode="max",
+            mode="min",
             num_samples=num_samples,
             scheduler=scheduler,
-            max_concurrent_trials=4,
+            # max_concurrent_trials=4,
             reuse_actors=True
         )
     )
@@ -86,7 +86,8 @@ def run_tuner(cfg: Dict,
 
         'iteration_metrics': {r.metrics.get('experiment_tag', f'unknown_experiment_tag_{i}'):
                               r.metrics_dataframe.to_dict(orient='index')
-                              for i, r in enumerate(tuner.get_results())}
+                              for i, r in enumerate(tuner.get_results())},
+        'config': cfg
     }
 
     ray.shutdown()
