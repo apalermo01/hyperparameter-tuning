@@ -85,6 +85,15 @@ class LightningTrainer(pl.LightningModule):
         self.log('val_loss', loss, on_step=True, prog_bar=True)
         return {'val_loss': loss}
 
+    def test_step(self, batch, batch_idx):
+        x, target = batch
+        pred = self.model(x)
+        target = F.one_hot(target, 10).type(torch.float32)
+        print(pred, target)
+        # loss = self.loss(pred, target)
+        # self.log('val_loss', loss, on_step=True, prog_bar=True)
+        # return {'val_loss': loss}
+
     def configure_optimizers(self):
         if self.optimizer_cfg['args'] is not None:
             args = self.optimizer_cfg['args']

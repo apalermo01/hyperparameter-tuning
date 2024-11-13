@@ -148,3 +148,14 @@ class PytorchDataset(pl.LightningDataModule):
         )
 
         return train_loader
+
+    def test_dataloader(self):
+        test_dataloader = DataLoader(
+            dataset=self.test_dataset,
+            sampler=None,
+            shuffle=False,
+            num_workers=self.num_workers,
+            batch_size=self.batch_size
+        )
+
+        return test_dataloader
