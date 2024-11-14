@@ -4,7 +4,7 @@ from hparam_tuning_project.utils import initialize_callbacks
 import lightning.pytorch as pl
 
 
-def build_modules(cfg, extra_callbacks=None, plugins=None, strategy=None):
+def build_modules(cfg, extra_callbacks=None, plugins=None, strategy='auto'):
     print("pl version = ", pl.__version__)
     if extra_callbacks is None:
         extra_callbacks = []

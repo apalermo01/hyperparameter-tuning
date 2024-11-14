@@ -1,4 +1,5 @@
 import lightning.pytorch as pl
+from sklearn.metrics import accuracy_score
 import torch.nn.functional as F
 import torch
 from torch import optim
@@ -36,6 +37,12 @@ loss_registry = {
 }
 
 
+class Scorer:
+
+    def __call__(self, pred, actual):
+        return accuracy_score(pred, actual)
+
+
 class LightningTrainer(pl.LightningModule):
     """Trainer for the hyperparameter tuning project"""
 
@@ -57,9 +64,9 @@ class LightningTrainer(pl.LightningModule):
         self.scheduler_cfg = scheduler_cfg
         self.model = self.build_model()
         self.loss = self.build_loss()
+        self.scorer = self.build_scorer()
 
         self.lr = self.optimizer_cfg['args']['lr']
-
         # storing these to self just so they're saved as hyperparams
         self.flags = flags
         self.callbacks = callbacks
@@ -89,10 +96,8 @@ class LightningTrainer(pl.LightningModule):
         x, target = batch
         pred = self.model(x)
         target = F.one_hot(target, 10).type(torch.float32)
-        print(pred, target)
-        # loss = self.loss(pred, target)
-        # self.log('val_loss', loss, on_step=True, prog_bar=True)
-        # return {'val_loss': loss}
+        score = self.scorer(pred, target)
+        return {'accuracy': score}
 
     def configure_optimizers(self):
         if self.optimizer_cfg['args'] is not None:
@@ -126,3 +131,6 @@ class LightningTrainer(pl.LightningModule):
         else:
             args = dict()
         return loss_registry[self.loss_cfg['loss_id']](**args)
+
+    def build_scorer(self):
+        return Scorer()
