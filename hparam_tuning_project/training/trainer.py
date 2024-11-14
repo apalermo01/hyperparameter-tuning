@@ -108,6 +108,7 @@ class LightningTrainer(pl.LightningModule):
         pred = self.model(x)
         target = F.one_hot(target, 10).type(torch.float32)
         score = self.scorer(pred, target)
+        self.log('accuracy', score, on_step=True, prog_bar=True)
         return {'accuracy': score}
 
     def configure_optimizers(self):
