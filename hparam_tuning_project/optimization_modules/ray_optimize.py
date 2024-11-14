@@ -40,6 +40,7 @@ def run_tuner(cfg: Dict,
     # ray.init(_memory=12 * 1024 ** 3)
 
     cfg['flags']['enable_progress_bar'] = False
+    cfg['flags']['max_epochs'] = num_epochs
 
     extra_callbacks = []
 

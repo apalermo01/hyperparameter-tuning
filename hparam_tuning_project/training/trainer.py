@@ -40,6 +40,10 @@ loss_registry = {
 class Scorer:
 
     def __call__(self, pred, actual):
+        pred = F.sigmoid(pred)
+        indices = torch.argmax(pred, dim=1)
+        pred = torch.zeros(pred.shape)
+        pred[torch.arange(0, indices.shape[0]), indices] = 1
         return accuracy_score(pred, actual)
 
 
@@ -52,6 +56,7 @@ class LightningTrainer(pl.LightningModule):
                  data_cfg,
                  loss_cfg,
                  scheduler_cfg=None,
+                 scorer_cfg=None,
                  flags=None,
                  callbacks=None,
                  meta=None
@@ -61,7 +66,13 @@ class LightningTrainer(pl.LightningModule):
         self.optimizer_cfg = optimizer_cfg
         self.data_cfg = data_cfg
         self.loss_cfg = loss_cfg
+        if scheduler_cfg is None:
+            scheduler_cfg = {}
         self.scheduler_cfg = scheduler_cfg
+        if scorer_cfg is None:
+            scorer_cfg = {}
+        self.scorer_cfg = scorer_cfg
+
         self.model = self.build_model()
         self.loss = self.build_loss()
         self.scorer = self.build_scorer()
@@ -107,7 +118,7 @@ class LightningTrainer(pl.LightningModule):
         optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](
             self.model.parameters(), **args)
 
-        if self.scheduler_cfg is not None:
+        if len(self.scheduler_cfg) > 0:
             if self.scheduler_cfg['args'] is not None:
                 args = self.scheduler_cfg['args']
             else:
@@ -133,4 +144,5 @@ class LightningTrainer(pl.LightningModule):
         return loss_registry[self.loss_cfg['loss_id']](**args)
 
     def build_scorer(self):
-        return Scorer()
+        args = self.scorer_cfg.get('args', {})
+        return Scorer(**args)
