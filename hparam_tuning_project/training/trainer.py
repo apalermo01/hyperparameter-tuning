@@ -110,6 +110,9 @@ class LightningTrainer(pl.LightningModule):
         score = self.scorer(pred, target)
         self.log('accuracy', score, on_step=True, prog_bar=True)
         return {'accuracy': score}
+    
+    def predict_step(self, batch, batch_idx):
+        return self(batch)
 
     def configure_optimizers(self):
         if self.optimizer_cfg['args'] is not None:
