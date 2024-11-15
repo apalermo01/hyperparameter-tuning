@@ -10,7 +10,7 @@ def main():
 
     for file in tqdm(os.listdir(root_path)):
         new_file_name = file.split('.')[0] + '_with_train_data.yaml'
-        if os.path.exists(os.path.join(root_path, new_file_name)):
+        if os.path.exists(os.path.join(results_path, new_file_name)):
             print(f"{new_file_name} already exists. Continuing...")
             continue
 
@@ -41,8 +41,9 @@ def main():
             'test_accuracy': accuracy,
             'test_config': cfg
         }
+        with open(os.path.join(results_path, new_file_name), "w") as f:
+            yaml.dump(res, f)
 
-        break
 
 
 if __name__ == '__main__':
