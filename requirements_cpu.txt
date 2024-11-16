@@ -10,6 +10,7 @@ ray[tune]
 ray[default]
 tqdm
 boto3
+seaborn
 
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch

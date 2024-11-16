@@ -3,30 +3,32 @@ The objective of this project is to emperically determine whether or not the bes
 
 I just finished a proof-of-concept trial to test out the training pipeline with raytune, please see the notebook '01 - analyze results from proof-of-concept runs on 20221019' for the discussion.
 
-# Docker setup
-To set up the dependancies in a docker container, do:
+# Setup
 
-build the image:
-```bash
-docker build --tag hparam_project .
-```
+To run this project, first clone the repository.
 
-start the container with a bind mount attached:
-```bash
-docker run -d \
-           --mount
-           --name hparam hparam_project tail -f /dev/null
-```
+`git clone git@github.com:apalermo01/hyperparameter-tuning.git`
 
-open a bash terminal inside the container:
-```
-docker exec -it hparam bash
-```
+create a python virtual environment using the tool of your choice.
 
-while inside the container, activate the conda environment
-```bash
-conda activate hparam_project
-```
+Install the requirements.
+
+`pip install requirements_cpu.txt`
+
+If you use a gpu: update the requirements_cpu.txt to reflect the installation options for pytorch relevant to you.
+
+Install the project.
+
+`pip install --editable .`
+
+# Project structure
+
+This project uses pytorch lightning and ray tune to train and optimize many models trained on common datasets (e.g. MNIST). The core of the project is in the `hparam_tuning_project` folder. Developemnt and analysis notebook are located in the `notebooks` folder. Jupyter notebooks that represent active development or are relevant to the writeup are in the root directory of the project. All datasets use precomputed splits that live in the `splits` folder. Experiments live in the `experiments` folder. Each experiment has a `run.py` or `run.sh` file that is used to run the whole experiment, a `results` folder that stores the results from each experiment in yaml format, and optionally a `training_configs` folder that has the configuration options for each model / dataset split.
+
+# Results
+
+
+
 # TODO
 
 - [x] build a simple feed forward network
@@ -37,24 +39,7 @@ conda activate hparam_project
 - [ ] update requirements and add installation instructions
 - [x] rethink tran/val splits (use stratified sampling and sample 100%, 75%, 50%, 25%, and 10% of dataset)
 - [ ] implement learning rate scheduling
-- [ ] change learning rate hyperparameter, and other hparams in training
+- [x] change learning rate hyperparameter, and other hparams in training
 - [ ] implement data augmentation
 
 
-## Notes
-linode -> object store:
-s3cmd put /hparam_results/lr_opt_20221109_mnist/* s3://hparam-project/hparam_results/lr_opt_20221109_mnist --recursive
-
-https://www.linode.com/docs/products/storage/object-storage/guides/s3cmd
-
-
-- next steps 20221217
-
-- cifar10 + cnn2
-- mnist + resnet18
-- cifar10 + resnet18
-
-Download files from linode:
-scp <linode username>@<linode ip>:/path/to/linode/file /path/to/local/file
-
-for a directory, use the -r flag
