@@ -91,6 +91,12 @@ class PytorchDataset(pl.LightningDataModule):
             transform=self.transform
         )
 
+        self.test_dataset = self.dataset_registry[self.dataset_id](
+            root=self.dataset_path,
+            train=False,
+            transform=self.transform
+        )
+
         if self.use_precomputed_split:
 
             if self.split_id is None:
@@ -148,3 +154,14 @@ class PytorchDataset(pl.LightningDataModule):
         )
 
         return train_loader
+
+    def test_dataloader(self):
+        test_dataloader = DataLoader(
+            dataset=self.test_dataset,
+            sampler=None,
+            shuffle=False,
+            num_workers=self.num_workers,
+            batch_size=self.batch_size
+        )
+
+        return test_dataloader

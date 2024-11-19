@@ -14,7 +14,7 @@ from ray.train import RunConfig, CheckpointConfig
 import time
 
 
-def train_func(config):
+def train_func(config, ret_learner=False):
     cfg = config['cfg']
     extra_callbacks = config['extra_callbacks']
     extra_callbacks.append(RayTrainReportCallback())
@@ -27,6 +27,8 @@ def train_func(config):
     )
     learner = prepare_trainer(learner)
     learner.fit(model, dataset)
+    if ret_learner:
+        return learner
 
 
 def run_tuner(cfg: Dict,
@@ -38,6 +40,7 @@ def run_tuner(cfg: Dict,
     # ray.init(_memory=12 * 1024 ** 3)
 
     cfg['flags']['enable_progress_bar'] = False
+    cfg['flags']['max_epochs'] = num_epochs
 
     extra_callbacks = []
 

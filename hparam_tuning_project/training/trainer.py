@@ -1,4 +1,5 @@
 import lightning.pytorch as pl
+from sklearn.metrics import accuracy_score
 import torch.nn.functional as F
 import torch
 from torch import optim
@@ -36,6 +37,16 @@ loss_registry = {
 }
 
 
+class Scorer:
+
+    def __call__(self, pred, actual):
+        pred = F.sigmoid(pred)
+        indices = torch.argmax(pred, dim=1)
+        pred = torch.zeros(pred.shape)
+        pred[torch.arange(0, indices.shape[0]), indices] = 1
+        return accuracy_score(pred, actual)
+
+
 class LightningTrainer(pl.LightningModule):
     """Trainer for the hyperparameter tuning project"""
 
@@ -45,6 +56,7 @@ class LightningTrainer(pl.LightningModule):
                  data_cfg,
                  loss_cfg,
                  scheduler_cfg=None,
+                 scorer_cfg=None,
                  flags=None,
                  callbacks=None,
                  meta=None
@@ -54,12 +66,18 @@ class LightningTrainer(pl.LightningModule):
         self.optimizer_cfg = optimizer_cfg
         self.data_cfg = data_cfg
         self.loss_cfg = loss_cfg
+        if scheduler_cfg is None:
+            scheduler_cfg = {}
         self.scheduler_cfg = scheduler_cfg
+        if scorer_cfg is None:
+            scorer_cfg = {}
+        self.scorer_cfg = scorer_cfg
+
         self.model = self.build_model()
         self.loss = self.build_loss()
+        self.scorer = self.build_scorer()
 
         self.lr = self.optimizer_cfg['args']['lr']
-
         # storing these to self just so they're saved as hyperparams
         self.flags = flags
         self.callbacks = callbacks
@@ -85,6 +103,17 @@ class LightningTrainer(pl.LightningModule):
         self.log('val_loss', loss, on_step=True, prog_bar=True)
         return {'val_loss': loss}
 
+    def test_step(self, batch, batch_idx):
+        x, target = batch
+        pred = self.model(x)
+        target = F.one_hot(target, 10).type(torch.float32)
+        score = self.scorer(pred, target)
+        self.log('accuracy', score, on_step=True, prog_bar=True)
+        return {'accuracy': score}
+    
+    def predict_step(self, batch, batch_idx):
+        return self(batch)
+
     def configure_optimizers(self):
         if self.optimizer_cfg['args'] is not None:
             args = self.optimizer_cfg['args']
@@ -93,7 +122,7 @@ class LightningTrainer(pl.LightningModule):
         optimizer = optimizer_registry[self.optimizer_cfg['optimizer_id']](
             self.model.parameters(), **args)
 
-        if self.scheduler_cfg is not None:
+        if len(self.scheduler_cfg) > 0:
             if self.scheduler_cfg['args'] is not None:
                 args = self.scheduler_cfg['args']
             else:
@@ -117,3 +146,7 @@ class LightningTrainer(pl.LightningModule):
         else:
             args = dict()
         return loss_registry[self.loss_cfg['loss_id']](**args)
+
+    def build_scorer(self):
+        args = self.scorer_cfg.get('args', {})
+        return Scorer(**args)
