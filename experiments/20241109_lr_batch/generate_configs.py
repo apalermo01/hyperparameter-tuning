@@ -11,7 +11,7 @@ def main():
         10: '_0_1',
     }
 
-    cfg_path = 'experiments/lr_batch_20241109/training_configs/'
+    cfg_path = 'experiments/20241109_lr_batch/training_configs/'
     base_cfg = cfg_path + '_pytorch_classifier_mnist.yaml'
     with open(base_cfg, "r") as f:
         cfg = yaml.safe_load(f)
