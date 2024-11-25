@@ -67,11 +67,6 @@ def main():
         np.savetxt(f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_train.txt", train_subset_idx)
         np.savetxt(f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_val.txt", val_subset_idx)
 
-    # # one tenth of usual size
-    # throwaway = len(idxes) - (train_size // 10) - (val_size // 10)
-    # train_idxs, val_idxs, _ = random_split(idxes, [train_size // 10, val_size // 10, throwaway])
-    # np.savetxt(f"./splits/{args.dataset_id}_small_train.txt", train_idxs)
-    # np.savetxt(f"./splits/{args.dataset_id}_small_val.txt", val_idxs)
 
 
 def parse_args():

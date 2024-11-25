@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional, List
 import lightning.pytorch as pl
 from torchvision import datasets as ds
 from torch.utils.data import Dataset
@@ -10,6 +10,11 @@ from torch.utils.data import Subset
 from torch.utils.data import DataLoader
 import numpy as np
 import os
+
+
+transforms_registry = {
+    'resize': transforms.Resize
+}
 
 
 class PytorchDataset(pl.LightningDataModule):
@@ -39,6 +44,7 @@ class PytorchDataset(pl.LightningDataModule):
     def __init__(self,
                  dataset_id: str,
                  train: bool,
+                 data_transforms: Optional[List] = None,
                  batch_size: int = 4,
                  num_workers: int = 1,
                  use_default_path: bool = True,
@@ -52,7 +58,11 @@ class PytorchDataset(pl.LightningDataModule):
         super().__init__()
 
         self.dataset_id = dataset_id
-        self.transform = transforms.Compose([transforms.ToTensor()])
+        trans: List = [transforms.ToTensor()]
+        if data_transforms is not None:
+            for t in data_transforms:
+                trans.append(transforms_registry[t['id']](**t['args']))
+        self.transform = transforms.Compose(trans)
         self.train = train
         self.batch_size = batch_size
         self.num_workers = num_workers

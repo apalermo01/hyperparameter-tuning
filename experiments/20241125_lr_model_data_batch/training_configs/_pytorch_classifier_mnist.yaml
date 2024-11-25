@@ -1,0 +1,40 @@
+model_cfg:
+  model_id: CNN2
+  args:
+    in_channels: 1
+    n_classes: 10
+    input_shape: [28, 28]
+    ch1: 8
+    ch2: 16
+    ch3: 64
+    lin1: 128
+    batch_norm: True
+    dropout: True
+
+data_cfg:
+  dataset_id: mnist
+  train: True
+  batch_size: 16
+  num_workers: 3
+  use_precomputed_split: True
+  split_id: mnist_0_1
+  workdir: /home/alex/Documents/git/hyperparameter-tuning/
+
+loss_cfg:
+  loss_id: bce_with_logits_loss
+  args:
+
+optimizer_cfg:
+  optimizer_id: adam
+  args:
+    lr: 0.001
+
+flags:
+  max_epochs: 10
+  default_root_dir: ./experiments/20241125_lr_model_data_batch/
+
+callbacks:
+  - early_stop:
+      monitor: 'val_loss'
+      mode: 'min'
+  - plot_metrics:
