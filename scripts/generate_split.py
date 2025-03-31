@@ -22,9 +22,10 @@ def check_classes(dataset, train_idxs, val_idxs, targets):
     # assert False
     for c in torch.unique(targets):
         # calculate percentage of train indices with this class
-        print(f"% of train dataset with class {c}: {(train_labels[train_labels==c.item()].shape[0]/train_labels.shape[0])*100:.4f}%; "
-              f"% of val dataset with class {c}: {(val_labels[val_labels==c.item()].shape[0]/val_labels.shape[0])*100:.4f}%")
-    print("intersect of train / val (should be empty): ", np.intersect1d(train_idxs, val_idxs))
+        print(f"% of train dataset with class {c}: {(train_labels[train_labels == c.item()].shape[0]/train_labels.shape[0])*100:.4f}%; "
+              f"% of val dataset with class {c}: {(val_labels[val_labels == c.item()].shape[0]/val_labels.shape[0])*100:.4f}%")
+    print("intersect of train / val (should be empty): ",
+          np.intersect1d(train_idxs, val_idxs))
     print('\n\n')
 
 
@@ -44,10 +45,12 @@ def main():
     targets = dataset.targets
     if isinstance(targets, list):
         targets = torch.tensor(targets)
-    train_idxs, val_idxs = train_test_split(idxes, train_size=0.8, stratify=targets)
+    train_idxs, val_idxs = train_test_split(
+        idxes, train_size=0.8, stratify=targets)
 
     print("=" * 80)
-    print(f'checking class distributions for full {args.dataset_id} dataset, contains {len(train_idxs)} training samples and {len(val_idxs)} val samples')
+    print(f'checking class distributions for full {args.dataset_id} dataset, contains {
+          len(train_idxs)} training samples and {len(val_idxs)} val samples')
     check_classes(dataset, train_idxs, val_idxs, targets)
 
     np.savetxt(f"./splits/{args.dataset_id}_train.txt", train_idxs)
@@ -57,16 +60,20 @@ def main():
     fracs = [0.75, 0.5, 0.25, 0.1]
 
     for f in fracs:
-        train_subset_idx, _ = train_test_split(train_idxs, train_size=f, stratify=targets[train_idxs])
-        val_subset_idx, _ = train_test_split(val_idxs, train_size=f, stratify=targets[val_idxs])
+        train_subset_idx, _ = train_test_split(
+            train_idxs, train_size=f, stratify=targets[train_idxs])
+        val_subset_idx, _ = train_test_split(
+            val_idxs, train_size=f, stratify=targets[val_idxs])
 
         print("=" * 80)
-        print(f"checking class distributions for {f*100}% of {args.dataset_id} dataset, contains {len(train_subset_idx)} training samples and {len(val_subset_idx)} val samples")
+        print(f"checking class distributions for {f*100}% of {args.dataset_id} dataset, contains {
+              len(train_subset_idx)} training samples and {len(val_subset_idx)} val samples")
         check_classes(dataset, train_subset_idx, val_subset_idx, targets)
 
-        np.savetxt(f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_train.txt", train_subset_idx)
-        np.savetxt(f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_val.txt", val_subset_idx)
-
+        np.savetxt(
+            f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_train.txt", train_subset_idx)
+        np.savetxt(
+            f"./splits/{args.dataset_id}_{str(f).replace('.', '_')}_val.txt", val_subset_idx)
 
 
 def parse_args():

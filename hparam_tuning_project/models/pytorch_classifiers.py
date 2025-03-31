@@ -86,7 +86,7 @@ class TorchClassifier(nn.Module):
                  architecture_id,
                  pretrained=True,
                  num_classes=1000,
-                 num_input_channels=3,
+                 in_channels=3,
                  **kwargs):
 
         super(TorchClassifier, self).__init__()
@@ -105,7 +105,7 @@ class TorchClassifier(nn.Module):
                                                   bias=bias)
 
         # replace input convolutional layer if there are not 3 input channels
-        if num_input_channels != 3:
+        if in_channels != 3:
 
             if 'conv1' in self.model._modules:
                 old_input_conv = self.model._modules['conv1']
@@ -115,7 +115,7 @@ class TorchClassifier(nn.Module):
                     bias = True
 
                 self.model._modules['conv1'] = nn.Conv2d(
-                    in_channels=num_input_channels,
+                    in_channels=in_channels,
                     out_channels=old_input_conv.out_channels,
                     kernel_size=old_input_conv.kernel_size,
                     stride=old_input_conv.stride,
@@ -135,7 +135,7 @@ class TorchClassifier(nn.Module):
                     bias = True
 
                 self.model._modules['stem']._modules['0'] = nn.Conv2d(
-                    in_channels=num_input_channels,
+                    in_channels=in_channels,
                     out_channels=old_input_conv.out_channels,
                     kernel_size=old_input_conv.kernel_size,
                     stride=old_input_conv.stride,

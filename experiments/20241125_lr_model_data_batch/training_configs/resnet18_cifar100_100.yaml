@@ -1,0 +1,33 @@
+callbacks:
+- early_stop:
+    mode: min
+    monitor: val_loss
+- plot_metrics: null
+data_cfg:
+  batch_size: 16
+  dataset_id: cifar100
+  num_workers: 3
+  split_id: cifar100
+  train: true
+  use_precomputed_split: true
+  workdir: /home/alex/Documents/git/hyperparameter-tuning/
+flags:
+  default_root_dir: ./experiments/20241125_lr_model_data_batch/training_configs/
+  max_epochs: 10
+loss_cfg:
+  args: null
+  loss_id: bce_with_logits_loss
+model_cfg:
+  args:
+    architecture_id: resnet_18
+    in_channels: 3
+    input_shape:
+    - 32
+    - 32
+    num_classes: 100
+    pretrained: true
+  model_id: pytorch_model
+optimizer_cfg:
+  args:
+    lr: 0.001
+  optimizer_id: adam

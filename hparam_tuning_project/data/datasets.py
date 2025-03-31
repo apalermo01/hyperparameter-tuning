@@ -1,10 +1,8 @@
 from typing import Union, Optional, List
 import lightning.pytorch as pl
 from torchvision import datasets as ds
-from torch.utils.data import Dataset
 from torchvision import transforms
 from hparam_tuning_project.utils import PATHS
-import torch
 from torch.utils.data.dataset import random_split
 from torch.utils.data import Subset
 from torch.utils.data import DataLoader
@@ -25,8 +23,8 @@ class PytorchDataset(pl.LightningDataModule):
     """
 
     dataset_registry = {
-        'caltech_101': ds.Caltech101,
-        'caltech_256': ds.Caltech256,
+        # 'caltech_101': ds.Caltech101,
+        # 'caltech_256': ds.Caltech256,
         'celeba': ds.CelebA,
         'cifar10': ds.CIFAR10,
         'cifar100': ds.CIFAR100,
